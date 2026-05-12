@@ -18,14 +18,14 @@ import SiteHeader from "@/components/SiteHeader";
 import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Team Pravix",
+  title: "About Pravix — Wealth Management Company India",
   description:
     "Meet the Pravix leadership team and learn our vision for disciplined, goal-based wealth management for Indian families.",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
-    title: "Team Pravix | Vision, Leadership, and Advisory Team",
+    title: "About Pravix — Wealth Management Company India",
     description:
       "Meet the Pravix leadership team and learn our vision for disciplined, goal-based wealth management for Indian families.",
     url: absoluteUrl("/about"),
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Team Pravix | Vision, Leadership, and Advisory Team",
+    title: "About Pravix — Wealth Management Company India",
     description:
       "Meet the Pravix leadership team and learn our vision for disciplined, goal-based wealth management for Indian families.",
     images: ["/image/about-hero-family.webp"],

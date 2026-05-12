@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { defaultOgImage } from "@/lib/seo";
+import { absoluteUrl, defaultOgImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Learn",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pravix Learn | Personal Wealth Notes",
     description: "Personal finance, tax, and investing articles from Pravix experts for Indian households.",
-    url: "/learn",
+    url: absoluteUrl("/learn"),
     type: "website",
     images: [defaultOgImage],
   },

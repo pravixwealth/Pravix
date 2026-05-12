@@ -20,6 +20,8 @@ export const defaultSeoKeywords = [
   "Pravix",
   "Pravix Wealth",
   "Pravix Wealth Management",
+  "Pravix India",
+  "pravix.in",
   "financial planning India",
   "wealth management India",
   "goal-based investing",
@@ -31,6 +33,8 @@ export const defaultSeoKeywords = [
   "tax optimization India",
   "portfolio insights",
   "smart investment planning",
+  "AI wealth advisor India",
+  "mutual fund advisory India",
 ];
 
 // ────────────────────────────────────────────────────────────────
@@ -72,15 +76,32 @@ export function organizationJsonLd() {
     alternateName: siteShortName,
     url: absoluteUrl("/"),
     logo: absoluteUrl("/image/pravix-visualmark.png"),
+    image: absoluteUrl("/image/pravix-visualmark.png"),
     description: siteDescription,
     foundingDate: "2025",
     areaServed: {
       "@type": "Country",
       name: "India",
     },
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "IN",
+    },
+    telephone: "+918796215599",
+    knowsAbout: [
+      "Wealth Management",
+      "Mutual Fund Advisory",
+      "SIP Planning",
+      "Financial Planning for Indian Families",
+      "Goal-Based Investing",
+      "Tax Optimization India",
+      "HNI Portfolio Management",
+      "Corporate Bond Advisory",
+    ],
     sameAs: socialProfileUrls,
     contactPoint: {
       "@type": "ContactPoint",
+      telephone: "+918796215599",
       contactType: "customer service",
       availableLanguage: ["English", "Hindi"],
     },
@@ -133,6 +154,39 @@ export function faqJsonLd(items: Array<{ question: string; answer: string }>) {
         text: item.answer,
       },
     })),
+  };
+}
+
+/** WebPage schema — for homepage rich result */
+export function webPageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `Pravix — ${siteTagline}`,
+    url: absoluteUrl("/"),
+    description: siteDescription,
+    inLanguage: "en-IN",
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteName,
+      url: absoluteUrl("/"),
+    },
+    about: {
+      "@type": "FinancialService",
+      name: siteName,
+      url: absoluteUrl("/"),
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: absoluteUrl("/"),
+        },
+      ],
+    },
   };
 }
 
