@@ -23,10 +23,11 @@ function WhatsappIcon() {
 
 interface QuickConnectButtonProps {
   variant?: "dark" | "accent";
+  label?: string;
   className?: string;
 }
 
-export default function QuickConnectButton({ variant = "dark", className = "" }: QuickConnectButtonProps) {
+export default function QuickConnectButton({ variant = "dark", label, className = "" }: QuickConnectButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const baseButtonClasses =
@@ -34,8 +35,12 @@ export default function QuickConnectButton({ variant = "dark", className = "" }:
 
   const variantClasses =
     variant === "dark"
-      ? "w-12 sm:w-[12.5rem] border-[#1f3b35] bg-[#0a1930]"
-      : "w-auto sm:w-auto border-[#1e44cd] bg-[#2b5cff] px-4 sm:px-6";
+      ? label
+        ? "w-auto border-[#1f3b35] bg-[#0a1930] px-5 sm:px-6"
+        : "w-12 sm:w-[12.5rem] border-[#1f3b35] bg-[#0a1930]"
+      : label
+        ? "w-auto border-[#1e44cd] bg-[#2b5cff] px-5 sm:px-6"
+        : "w-auto sm:w-auto border-[#1e44cd] bg-[#2b5cff] px-4 sm:px-6";
 
   return (
     <div className={`relative inline-block ${className}`}>
@@ -112,7 +117,7 @@ export default function QuickConnectButton({ variant = "dark", className = "" }:
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
           <PhoneCall className="h-4 w-4" />
         </span>
-        <span className="hidden sm:inline">Contact Pravix</span>
+        <span className={label ? "inline text-sm font-semibold" : "hidden sm:inline"}>{label || "Contact Pravix"}</span>
         <Sparkles className="hidden h-4 w-4 text-white/85 transition-transform duration-200 group-hover:scale-110 sm:block" />
       </button>
     </div>

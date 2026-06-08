@@ -439,7 +439,7 @@ export default function ServicesPage() {
             {/* Closing CTA card */}
             <motion.article
               variants={fadeUp}
-              className="flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-[#1f3a73] bg-gradient-to-br from-[#0a1930] to-[#1b3566] p-6 text-white shadow-[0_18px_40px_rgba(16,47,103,0.25)]"
+              className="flex h-full flex-col justify-between rounded-3xl border border-[#1f3a73] bg-gradient-to-br from-[#0a1930] to-[#1b3566] p-6 text-white shadow-[0_18px_40px_rgba(16,47,103,0.25)]"
             >
               <div>
                 <h3 className="text-lg font-semibold tracking-tight">Not sure where to start?</h3>
@@ -447,20 +447,8 @@ export default function ServicesPage() {
                   Get a personalized plan that maps the right Pravix services to your goals, income, and risk profile.
                 </p>
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/onboarding"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[#2b5cff] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(43,92,255,0.32)] transition-transform hover:-translate-y-0.5"
-                >
-                  Get Guided Plan
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="#services-faq"
-                  className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-                >
-                  Read FAQ
-                </Link>
+              <div className="mt-6 flex justify-center">
+                <QuickConnectButton variant="accent" label="Contact Us" />
               </div>
             </motion.article>
           </motion.div>
@@ -684,14 +672,8 @@ export default function ServicesPage() {
               </AnimatePresence>
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <QuickConnectButton variant="dark" />
-              <Link
-                href="/onboarding"
-                className="inline-flex items-center justify-center rounded-full border border-[#d1def8] bg-white px-5 py-2.5 text-sm font-semibold text-[#23467f] hover:bg-[#f5f8ff]"
-              >
-                Get Guided Plan
-              </Link>
+            <div className="mt-6 flex justify-center">
+              <QuickConnectButton variant="dark" label="Contact Us" />
             </div>
           </div>
         </section>
@@ -864,7 +846,7 @@ export default function ServicesPage() {
                 Get Your Guided Plan
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              <QuickConnectButton variant="dark" />
+              <QuickConnectButton variant="dark" label="Contact Us" />
             </div>
           </div>
         </section>
