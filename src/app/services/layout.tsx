@@ -2,33 +2,37 @@ import type { Metadata } from "next";
 import { absoluteUrl, defaultOgImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Services — HNI, Mutual Funds, Corporate Bonds & Alternatives",
+  title: "Financial Planning, Tax, Insurance & Business Advisory Services | Pravix",
   description:
-    "Explore Pravix wealth management services: HNI portfolios, mutual fund advisory, corporate bond strategies, and alternative investments for Indian families.",
+    "Explore Pravix financial planning, tax advisory, insurance, lending, and business consulting services designed for Indian individuals, families, and business owners.",
   keywords: [
     "Pravix services",
-    "HNI wealth management India",
-    "mutual fund advisory India",
-    "corporate bonds India",
-    "alternative investments India",
-    "wealth management services",
+    "financial planning services India",
+    "wealth management India",
+    "tax filing and CA services India",
+    "GST services India",
+    "business advisory India",
+    "virtual CFO services",
+    "insurance solutions India",
+    "home loan and business loan India",
+    "lending solutions India",
   ],
   alternates: {
     canonical: "/services",
   },
   openGraph: {
-    title: "Pravix Services — Comprehensive Wealth Management",
+    title: "Financial Planning, Tax, Insurance & Business Advisory Services | Pravix",
     description:
-      "From HNI portfolios to mutual fund advisory — explore how Pravix helps Indian families build and protect wealth.",
+      "Explore Pravix financial planning, tax advisory, insurance, lending, and business consulting services designed for Indian individuals, families, and business owners.",
     url: absoluteUrl("/services"),
     type: "website",
-    images: [{ url: defaultOgImage, alt: "Pravix Wealth Management Services" }],
+    images: [{ url: defaultOgImage, alt: "Pravix Financial Services" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pravix Services — Comprehensive Wealth Management",
+    title: "Financial Planning, Tax, Insurance & Business Advisory Services | Pravix",
     description:
-      "From HNI portfolios to mutual fund advisory — explore how Pravix helps Indian families build and protect wealth.",
+      "Explore Pravix financial planning, tax advisory, insurance, lending, and business consulting services designed for Indian individuals, families, and business owners.",
     images: [defaultOgImage],
   },
 };

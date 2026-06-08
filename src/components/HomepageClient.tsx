@@ -1029,10 +1029,11 @@ export default function HomepageClient() {
 
                   <div className="mt-5 space-y-3">
                     {[
-                      { name: "HNI Services", icon: <Briefcase className="h-4 w-4" />, desc: "Goal-linked allocation & tax-aware structuring" },
-                      { name: "Mutual Fund Portfolio", icon: <Landmark className="h-4 w-4" />, desc: "Curated SIP & lump sum strategies" },
-                      { name: "Corporate Bonds", icon: <Building2 className="h-4 w-4" />, desc: "Income-focused fixed income opportunities" },
-                      { name: "Alternative Products", icon: <PieChartIcon className="h-4 w-4" />, desc: "IPOs, NFOs, Insurance & Corporate FDs" },
+                      { name: "Wealth Management", icon: <Briefcase className="h-4 w-4" />, desc: "Financial planning & goal-based investing" },
+                      { name: "Tax & CA Services", icon: <Landmark className="h-4 w-4" />, desc: "Tax filing, GST, accounting & compliance" },
+                      { name: "Business Advisory", icon: <Building2 className="h-4 w-4" />, desc: "Company setup, Virtual CFO & fundraising" },
+                      { name: "Insurance Solutions", icon: <PieChartIcon className="h-4 w-4" />, desc: "Life, health & corporate insurance" },
+                      { name: "Lending Solutions", icon: <Target className="h-4 w-4" />, desc: "Home loans, business loans & working capital" },
                     ].map((item, index) => (
                       <Link href="/services" key={item.name}>
                         <motion.div
@@ -1322,6 +1323,136 @@ export default function HomepageClient() {
                   </motion.div>
                 </div>
               </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* ═══════════════════════════════════════════════════════════════════
+            SECTION: COMPREHENSIVE FINANCIAL SERVICES (from /services)
+            ═══════════════════════════════════════════════════════════════════ */}
+        <motion.section
+          id="services-overview"
+          className="relative overflow-hidden py-24 md:py-32"
+          style={{ background: "linear-gradient(175deg, #f0f5ff 0%, #e4edff 35%, #f7f9ff 70%, #eef4ff 100%)" }}
+          variants={sectionReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={denseSectionViewport}
+        >
+          <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(43,92,255,0.07),transparent_70%)]" />
+          <div className="pointer-events-none absolute -bottom-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(0,216,255,0.06),transparent_70%)]" />
+
+          <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-14">
+            <motion.div className="mx-auto max-w-3xl text-center" variants={chartCardReveal} custom={0}>
+              <div className="mx-auto mb-5 inline-flex items-center gap-2.5 rounded-full border border-[#2b5cff]/15 bg-white/80 px-4 py-1.5 shadow-[0_4px_16px_rgba(43,92,255,0.08)] backdrop-blur-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2b5cff] opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#2b5cff]" />
+                </span>
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#2b5cff]">Our Services</span>
+              </div>
+              <h2 className="text-[clamp(1.8rem,4.5vw,3.2rem)] font-bold leading-[1.1] tracking-tight text-[#0a1930]">
+                Comprehensive{" "}
+                <span className="bg-[linear-gradient(120deg,#2b5cff,#0099ff)] bg-clip-text text-transparent">
+                  Financial Solutions
+                </span>
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#50607d] md:text-lg">
+                Everything you need to grow, protect, and manage your finances under one trusted platform.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+              initial="hidden"
+              whileInView="show"
+              viewport={cardGridViewport}
+            >
+              {[
+                {
+                  icon: Briefcase,
+                  title: "Wealth Management",
+                  desc: "Financial planning, investment advisory, retirement & education planning, and goal-based wealth creation.",
+                  accent: "#2b5cff",
+                  accentBg: "#edf4ff",
+                },
+                {
+                  icon: Landmark,
+                  title: "Tax & CA Services",
+                  desc: "Income tax filing, tax planning, GST services, accounting, payroll, and audit support.",
+                  accent: "#0099ff",
+                  accentBg: "#e8f6ff",
+                },
+                {
+                  icon: Building2,
+                  title: "Business Advisory",
+                  desc: "Company registration, startup advisory, virtual CFO, business valuation, and fundraising support.",
+                  accent: "#00b894",
+                  accentBg: "#e8fff5",
+                },
+                {
+                  icon: ShieldCheck,
+                  title: "Insurance Solutions",
+                  desc: "Life, health, corporate, and keyman insurance with complete risk management planning.",
+                  accent: "#6c5ce7",
+                  accentBg: "#f0edff",
+                },
+                {
+                  icon: Target,
+                  title: "Lending Solutions",
+                  desc: "Home loans, business loans, loan against property, and working capital funding with structuring guidance.",
+                  accent: "#e17055",
+                  accentBg: "#fff0ed",
+                },
+              ].map((card, index) => (
+                <motion.article
+                  key={card.title}
+                  className="group relative overflow-hidden rounded-[1.6rem] border border-white/80 bg-white/70 p-6 shadow-[0_8px_32px_rgba(43,92,255,0.06)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_48px_rgba(43,92,255,0.14)]"
+                  variants={featureCardReveal}
+                  custom={index}
+                >
+                  <div
+                    className="absolute inset-x-0 top-0 h-1 transition-all duration-300 group-hover:h-1.5"
+                    style={{ background: `linear-gradient(90deg, ${card.accent}, ${card.accent}88)` }}
+                  />
+                  <div
+                    className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-0 blur-[40px] transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ backgroundColor: `${card.accent}18` }}
+                  />
+                  <div
+                    className="relative inline-flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                    style={{ backgroundColor: card.accentBg }}
+                  >
+                    <card.icon className="h-5 w-5" style={{ color: card.accent }} />
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold text-[#0a1930]">{card.title}</h3>
+                  <p className="mt-2 text-[13px] leading-relaxed text-[#586987]">{card.desc}</p>
+                </motion.article>
+              ))}
+
+              {/* CTA card */}
+              <motion.article
+                className="group relative flex flex-col justify-between overflow-hidden rounded-[1.6rem] border border-[#1f3a73] p-6 shadow-[0_16px_40px_rgba(16,47,103,0.22)]"
+                style={{ background: "linear-gradient(145deg, #0a1930 0%, #1b3566 100%)" }}
+                variants={featureCardReveal}
+                custom={5}
+              >
+                <div>
+                  <h3 className="text-lg font-bold text-white">Not sure where to start?</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#c5d6f7]">
+                    Get a guided plan that maps the right services to your goals and risk profile.
+                  </p>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#2b5cff] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(43,92,255,0.32)] transition-transform hover:-translate-y-0.5"
+                  >
+                    Explore All Services
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </motion.article>
             </motion.div>
           </div>
         </motion.section>
