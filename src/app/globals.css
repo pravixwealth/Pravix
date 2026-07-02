@@ -8,12 +8,19 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* Promote fixed elements to their own layer for smooth scroll */
+.site-header-nav {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @theme inline {
@@ -33,7 +40,6 @@ html {
   --color-finance-muted: #5f7396;
   --color-finance-dim: #8196b8;
 
-  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 

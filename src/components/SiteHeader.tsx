@@ -46,7 +46,7 @@ export default function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [marketTicker, setMarketTicker] = useState<HeaderMarketIndicator[]>([]);
   const [isTickerLoading, setIsTickerLoading] = useState(true);
-  const marketTickerRefreshMs = 15000;
+  const marketTickerRefreshMs = 30000;
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 80);

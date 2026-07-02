@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
   },
+  experimental: {
+    optimizePackageImports: [
+      "recharts",
+      "framer-motion",
+      "lucide-react",
+      "react-icons",
+      "react-countup",
+    ],
+  },
   turbopack: {
     root: process.cwd(),
   },
@@ -31,6 +40,13 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        // Next.js static assets — immutable cache
+        source: "/_next/static/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
       {
         // Public image assets — long cache
         source: "/image/:path*",

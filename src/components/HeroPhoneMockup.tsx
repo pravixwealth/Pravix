@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 type Point = {
   x: number;
@@ -20,7 +20,7 @@ type GoalSlide = {
 
 const inrFormatter = new Intl.NumberFormat("en-IN");
 
-const ANIMATION_STEP_MS = 110;
+const ANIMATION_STEP_MS = 200;
 const CHART_POINT_COUNT = 30;
 const CHART_WIDTH = 286;
 const CHART_HEIGHT = 132;
@@ -108,6 +108,8 @@ function formatCompactInr(value: number): string {
 export default function HeroPhoneMockup() {
   const [visible, setVisible] = useState(false);
   const [animationTick, setAnimationTick] = useState(0);
+  const [isInView, setIsInView] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const gradientSuffix = useId().replace(/:/g, "");
 
@@ -121,7 +123,25 @@ export default function HeroPhoneMockup() {
     };
   }, []);
 
+  // Pause animation when not visible in viewport
   useEffect(() => {
+    const element = containerRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isInView) return;
+
     const animationTimer = setInterval(() => {
       setAnimationTick((currentTick) => currentTick + 1);
     }, ANIMATION_STEP_MS);
@@ -129,7 +149,7 @@ export default function HeroPhoneMockup() {
     return () => {
       clearInterval(animationTimer);
     };
-  }, []);
+  }, [isInView]);
 
   const elapsedSeconds = animationTick * (ANIMATION_STEP_MS / 1000);
   const totalValue = Math.round(BASE_PORTFOLIO_VALUE + elapsedSeconds * GROWTH_PER_SECOND);
@@ -205,6 +225,7 @@ export default function HeroPhoneMockup() {
 
   return (
     <div
+      ref={containerRef}
       className="relative flex w-full min-h-[330px] items-center justify-center sm:min-h-[500px] lg:min-h-[560px] xl:min-h-[620px]"
       style={{
         fontFamily: "system-ui, -apple-system, sans-serif",
