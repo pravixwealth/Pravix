@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
-import { ArrowRight, Menu, UserRound, X } from "lucide-react";
+import { ArrowRight, Building2, ChevronRight, Gem, HandCoins, Menu, Receipt, ShieldCheck, UserRound, X } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type HeaderMarketIndicatorId = "NIFTY50" | "BANKNIFTY" | "SENSEX";
@@ -677,6 +677,39 @@ export default function SiteHeader() {
         <div className="p-2.5">
           {navItems.map((item) => {
             const isActive = isNavItemActive(item.href);
+
+            // On mobile, replace the single "Services" item with inline service category links
+            if (item.label === "Services") {
+              const serviceLinks = [
+                { label: "Wealth Management", href: "/services#wealth", icon: Gem },
+                { label: "Tax & CA Services", href: "/services#tax", icon: Receipt },
+                { label: "Business Advisory", href: "/services#business", icon: Building2 },
+                { label: "Insurance Solutions", href: "/services#insurance", icon: ShieldCheck },
+                { label: "Lending Solutions", href: "/services#lending", icon: HandCoins },
+              ];
+
+              return (
+                <div key="mobile-services-group" className="mt-1 mb-0.5">
+                  <p className="px-3.5 pb-1.5 pt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#2b5cff]">
+                    Services
+                  </p>
+                  {serviceLinks.map((service) => {
+                    const ServiceIcon = service.icon;
+                    return (
+                      <Link
+                        key={`mobile-${service.label}`}
+                        href={service.href}
+                        className="flex items-center gap-2.5 rounded-xl px-3.5 py-[10px] text-sm font-semibold text-[#4d6389] transition-colors hover:bg-[#f5f8ff] hover:text-[#1d3561] active:bg-[#edf4ff]"
+                      >
+                        <ServiceIcon className="h-4 w-4 shrink-0 text-[#2b5cff]" aria-hidden="true" />
+                        <span className="flex-1">{service.label}</span>
+                        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[#b0c4e8]" aria-hidden="true" />
+                      </Link>
+                    );
+                  })}
+                </div>
+              );
+            }
 
             return (
               <Link
