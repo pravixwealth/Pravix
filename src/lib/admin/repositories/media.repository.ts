@@ -7,6 +7,7 @@ export type MediaFile = {
   id: string;
   filename: string;
   originalFilename: string;
+  title: string | null;
   storagePath: string;
   publicUrl: string;
   thumbnailUrl: string | null;
@@ -24,6 +25,7 @@ export type MediaFile = {
   folderId: string | null;
   uploadedBy: string;
   createdAt: string;
+  deletedAt: string | null;
 };
 
 export type MediaFolder = {
@@ -60,6 +62,7 @@ export type CreateMediaParams = {
 };
 
 export type UpdateMediaParams = {
+  title?: string | null;
   altText?: string | null;
   caption?: string | null;
   folderId?: string | null;
@@ -87,6 +90,7 @@ function rowToMediaFile(row: Record<string, unknown>): MediaFile {
     id: row.id as string,
     filename: row.filename as string,
     originalFilename: row.original_filename as string,
+    title: (row.title as string) ?? null,
     storagePath: row.storage_path as string,
     publicUrl: row.public_url as string,
     thumbnailUrl: (row.thumbnail_url as string) ?? null,
@@ -104,6 +108,7 @@ function rowToMediaFile(row: Record<string, unknown>): MediaFile {
     folderId: (row.folder_id as string) ?? null,
     uploadedBy: row.uploaded_by as string,
     createdAt: row.created_at as string,
+    deletedAt: (row.deleted_at as string) ?? null,
   };
 }
 
@@ -167,6 +172,7 @@ export async function listMedia(
   let query = supabase
     .from("media")
     .select("*", { count: "exact" })
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .range(offset, offset + perPage - 1);
 
@@ -212,6 +218,7 @@ export async function updateMedia(
 ): Promise<RepoResult<MediaFile>> {
   const updates: Record<string, unknown> = {};
 
+  if (params.title !== undefined) updates.title = params.title;
   if (params.altText !== undefined) updates.alt_text = params.altText;
   if (params.caption !== undefined) updates.caption = params.caption;
   if (params.folderId !== undefined) updates.folder_id = params.folderId;
@@ -251,6 +258,23 @@ export async function deleteMedia(
     };
   }
 
+  // Soft delete (recoverable)
+  const { error } = await supabase
+    .from("media")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: null };
+}
+
+export async function permanentlyDeleteMedia(
+  supabase: SupabaseClient,
+  id: string
+): Promise<RepoResult<null>> {
   // Get storage path for cleanup
   const { data: mediaData } = await supabase
     .from("media")
@@ -269,6 +293,24 @@ export async function deleteMedia(
   }
 
   return { success: true, data: null };
+}
+
+export async function restoreMedia(
+  supabase: SupabaseClient,
+  id: string
+): Promise<RepoResult<MediaFile>> {
+  const { data, error } = await supabase
+    .from("media")
+    .update({ deleted_at: null })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error || !data) {
+    return { success: false, error: error?.message ?? "Failed to restore" };
+  }
+
+  return { success: true, data: rowToMediaFile(data) };
 }
 
 export async function findByChecksum(
