@@ -15,6 +15,8 @@ import {
   siteUrl,
   websiteJsonLd,
 } from "@/lib/seo";
+import { getPublicLayoutData } from "@/lib/admin/public-layout.repository";
+import { PublicLayoutProvider } from "@/components/PublicLayoutProvider";
 import "./globals.css";
 
 const GlobalFloatingPravixChat = dynamic(() => import("@/components/GlobalFloatingPravixChat"), {
@@ -97,36 +99,40 @@ export const viewport: Viewport = {
   themeColor: "#2b5cff",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const layoutData = await getPublicLayoutData();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className={`${jakartaSans.variable} ${geistMono.variable} antialiased bg-finance-bg text-finance-text min-h-screen flex flex-col font-sans`}
       >
-        <GoogleAnalytics />
-        {/* Organization schema — Google Knowledge Panel */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
-        />
-        {/* WebSite schema — sitelinks search box */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }}
-        />
-        {/* SoftwareApplication schema — product rich result */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd()) }}
-        />
-        <main className="flex-grow flex flex-col">{children}</main>
-        <GlobalFloatingPravixChat />
-        <Footer />
+        <PublicLayoutProvider data={layoutData}>
+          <GoogleAnalytics />
+          {/* Organization schema — Google Knowledge Panel */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+          />
+          {/* WebSite schema — sitelinks search box */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }}
+          />
+          {/* SoftwareApplication schema — product rich result */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd()) }}
+          />
+          <main className="flex-grow flex flex-col">{children}</main>
+          <GlobalFloatingPravixChat />
+          <Footer layoutData={layoutData} />
+        </PublicLayoutProvider>
       </body>
     </html>
   );

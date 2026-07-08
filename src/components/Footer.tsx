@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, CalendarDays, Compass, Mail, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { FaInstagram, FaLinkedin, FaYoutube, FaFacebook } from "react-icons/fa";
-import { socialProfiles } from "@/lib/seo";
+import type { PublicLayoutData } from "@/lib/admin/public-layout.repository";
 
-const quickLinks = [
+type FooterProps = {
+  layoutData?: PublicLayoutData;
+};
+
+const defaultQuickLinks = [
   { label: "Home", href: "/" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Learn", href: "/learn" },
@@ -13,7 +17,7 @@ const quickLinks = [
   { label: "Get Started", href: "/onboarding" },
 ];
 
-const resourceLinks = [
+const defaultResourceLinks = [
   { label: "SIP Calculator", href: "/sip-calculator" },
   { label: "Investment Calculator", href: "/investment-calculator" },
   { label: "Financial Planning India", href: "/financial-planning-india" },
@@ -22,14 +26,21 @@ const resourceLinks = [
   { label: "How It Works", href: "/#how-it-works" },
 ];
 
-const supportLinks = [
+const defaultSupportLinks = [
   { label: "Get Started", href: "/onboarding" },
   { label: "Login", href: "/login" },
   { label: "Create Account", href: "/create-account" },
   { label: "Profile", href: "/profile" },
 ];
 
-export default function Footer() {
+export default function Footer({ layoutData }: FooterProps) {
+  const quickLinks = layoutData?.nav.footerCol1.length ? layoutData.nav.footerCol1 : defaultQuickLinks;
+  const resourceLinks = layoutData?.nav.footerCol2.length ? layoutData.nav.footerCol2 : defaultResourceLinks;
+  const supportLinks = layoutData?.nav.footerCol3.length ? layoutData.nav.footerCol3 : defaultSupportLinks;
+  const companyName = layoutData?.branding.companyName ?? "Pravix Wealth Management";
+  const description = layoutData?.footer.description ?? "Goal-based wealth planning for Indian families, with dashboards, market context, and guided onboarding.";
+  const social = layoutData?.social ?? { instagram: "https://www.instagram.com/pravixwealth/", linkedin: "https://www.linkedin.com/company/pravix-wealth-management/", youtube: "https://www.youtube.com/@PRAVIXwealth", facebook: "https://www.facebook.com/people/Pravix-Wealth-Management/61588755566789/", twitter: null };
+  const copyright = layoutData?.footer.copyright ?? "© 2025 Pravix Wealth Management. All rights reserved.";
   return (
     <footer id="contact" className="mt-auto border-t border-[#e1e7f2] bg-[#081424] text-white">
       <div className="mx-auto w-full max-w-7xl px-6 py-12 md:px-10 lg:px-14">
@@ -38,10 +49,10 @@ export default function Footer() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#a8c1ff]">
                 <Sparkles className="h-3.5 w-3.5 text-[#8de4ff]" />
-                Pravix Wealth Management
+                {companyName}
               </div>
               <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#c5d1e8] md:text-base">
-                Goal-based wealth planning for Indian families, with dashboards, market context, and guided onboarding.
+                {description}
               </p>
             </div>
 
@@ -117,25 +128,25 @@ export default function Footer() {
           <div className="flex flex-col gap-3 pb-2">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8aa2ca]">Follow Pravix for real financial insights</p>
             <div className="flex flex-wrap items-center gap-6">
-              <Link href={socialProfiles.instagram} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
+              <Link href={social.instagram ?? "#"} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-all group-hover:bg-[#E1306C] group-hover:shadow-[0_0_12px_rgba(225,48,108,0.5)]">
                   <FaInstagram className="h-4 w-4" />
                 </span>
                 Instagram
               </Link>
-              <Link href={socialProfiles.linkedin} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
+              <Link href={social.linkedin ?? "#"} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-all group-hover:bg-[#0A66C2] group-hover:shadow-[0_0_12px_rgba(10,102,194,0.5)]">
                   <FaLinkedin className="h-4 w-4" />
                 </span>
                 LinkedIn
               </Link>
-              <Link href={socialProfiles.youtube} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
+              <Link href={social.youtube ?? "#"} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-all group-hover:bg-[#FF0000] group-hover:shadow-[0_0_12px_rgba(255,0,0,0.5)]">
                   <FaYoutube className="h-4 w-4" />
                 </span>
                 YouTube
               </Link>
-              <Link href={socialProfiles.facebook} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
+              <Link href={social.facebook ?? "#"} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-all group-hover:bg-[#1877F2] group-hover:shadow-[0_0_12px_rgba(24,119,242,0.5)]">
                   <FaFacebook className="h-4 w-4" />
                 </span>

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { ArrowRight, Building2, ChevronRight, Gem, HandCoins, Menu, Receipt, ShieldCheck, UserRound, X } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { usePublicLayout } from "@/components/PublicLayoutProvider";
 
 type HeaderMarketIndicatorId = "NIFTY50" | "BANKNIFTY" | "SENSEX";
 
@@ -32,10 +33,20 @@ const HOME_SCROLL_SECTIONS = [
   { id: "contact-us", hash: "#contact-us" },
 ] as const;
 
-export default function SiteHeader() {
+export type SiteHeaderNavItem = {
+  label: string;
+  href: string;
+};
+
+type SiteHeaderProps = {
+  navItems?: SiteHeaderNavItem[];
+};
+
+export default function SiteHeader({ navItems: externalNavItems }: SiteHeaderProps = {}) {
   const pathname = usePathname();
   const router = useRouter();
   const isOnboarding = pathname.startsWith("/onboarding");
+  const layout = usePublicLayout();
 
   const [scrolled, setScrolled] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
@@ -268,7 +279,7 @@ export default function SiteHeader() {
     return (
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-finance-border/40 bg-finance-bg/95 backdrop-blur-sm">
         <div className="mx-auto h-16 max-w-6xl px-6 flex items-center justify-between">
-          <Link href="/" className="text-finance-text font-semibold tracking-tight text-lg">Pravix</Link>
+          <Link href="/" className="text-finance-text font-semibold tracking-tight text-lg">{layout.branding.shortName}</Link>
           <div className="hidden md:flex items-center gap-4 text-[11px] uppercase tracking-[0.2em] text-finance-muted">
             <span>Application Progress</span>
             <div className="flex gap-2">
@@ -283,14 +294,7 @@ export default function SiteHeader() {
   }
 
   /* ─── Nav Items ─── */
-  const baseNavItems = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Services", href: "/services" },
-    { label: "Marketplace", href: "/#insights" },
-    { label: "Blog", href: "/#blog" },
-    { label: "Team Pravix", href: "/#about-us" },
-    { label: "Contact", href: "/#contact-us" },
-  ];
+  const baseNavItems: SiteHeaderNavItem[] = externalNavItems ?? layout.nav.header;
   const navItems = baseNavItems;
 
   useEffect(() => {
@@ -506,19 +510,19 @@ export default function SiteHeader() {
               fontSize: scrolled ? "18px" : "22px",
               transition: "font-size 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease",
             }}
-            aria-label="Pravix home"
+            aria-label={`${layout.branding.shortName} home`}
           >
             <span className="relative inline-flex h-11 w-11 flex-none items-center justify-center overflow-visible mr-2">
               <Image
-                src="/image/pravix-visualmark.png"
-                alt="Pravix visual mark"
+                src={layout.branding.logoUrl}
+                alt={`${layout.branding.shortName} visual mark`}
                 width={44}
                 height={44}
                 className="h-11 w-11 object-contain transition-transform duration-300 group-hover:-translate-y-0.5 scale-[300%]"
                 priority
               />
             </span>
-            <span className="leading-none">Pravix</span>
+            <span className="leading-none">{layout.branding.shortName}</span>
           </Link>
 
           {/* Center nav links */}
