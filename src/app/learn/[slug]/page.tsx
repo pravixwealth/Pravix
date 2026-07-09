@@ -30,7 +30,12 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
-    alternates: { canonical: `/learn/${post.slug}` },
+    alternates: { canonical: post.canonicalUrl || `/learn/${post.slug}` },
+    robots: post.robots === "noindex,nofollow"
+      ? { index: false, follow: false }
+      : post.robots === "noindex,follow"
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
     openGraph: {
       title: post.seoTitle || post.title,
       description: post.seoDescription || post.excerpt || "",
@@ -59,9 +64,40 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   const post = result.data;
 
+  // Related posts: fetch all published, filter by shared tags, fallback to latest
+  const allPostsResult = await getPublishedPosts();
+  const relatedPosts = allPostsResult.success
+    ? allPostsResult.data
+        .filter((p) => p.slug !== post.slug)
+        .map((p) => ({
+          ...p,
+          overlap: p.tags.filter((t) => post.tags.includes(t)).length,
+        }))
+        .sort((a, b) => b.overlap - a.overlap)
+        .slice(0, 3)
+    : [];
+
+  // JSON-LD BlogPosting structured data
+  const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    url: absoluteUrl(`/learn/${post.slug}`),
+    datePublished: post.publishedAt,
+    author: { "@type": "Person", name: post.authorName },
+    publisher: { "@type": "Organization", name: siteName },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/learn/${post.slug}`) },
+    keywords: post.tags.join(", "),
+  };
+
   return (
     <>
       <SiteHeader />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+      />
       <div className="min-h-screen bg-finance-bg pb-16 pt-24">
         <div className="mx-auto w-full max-w-4xl px-6">
           <Link
@@ -73,19 +109,16 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </Link>
 
           <article className="mt-6 rounded-2xl border border-finance-border/70 bg-finance-panel p-8">
-            {/* Meta info */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-finance-muted">
               {post.publishedAt && (
                 <span>{new Date(post.publishedAt).toLocaleDateString("en-IN")}</span>
               )}
               <span className="text-finance-border">•</span>
               <span className="inline-flex items-center gap-1.5">
-                <Clock3 className="h-4 w-4" />
-                5 min read
+                <Clock3 className="h-4 w-4" />5 min read
               </span>
             </div>
 
-            {/* Author */}
             <div className="mt-4 flex items-center gap-3 rounded-xl border border-finance-border/60 bg-finance-surface/70 p-3.5">
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-finance-accent/10 text-sm font-semibold text-finance-accent">
                 {post.authorName.charAt(0)}
@@ -96,17 +129,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
             </div>
 
-            {/* Title */}
             <h1 className="mt-3 text-3xl font-semibold leading-tight text-finance-text md:text-5xl">
               {post.title}
             </h1>
 
-            {/* Excerpt */}
             {post.excerpt && (
               <p className="mt-4 text-base leading-relaxed text-finance-muted md:text-lg">{post.excerpt}</p>
             )}
 
-            {/* Tags */}
             {post.tags.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
@@ -117,7 +147,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
             )}
 
-            {/* Content */}
             {post.publishedContentHtml ? (
               <div
                 className="prose prose-neutral mt-8 max-w-none text-finance-text prose-headings:text-finance-text prose-p:text-finance-muted prose-a:text-[#2b5cff]"
@@ -127,6 +156,27 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <p className="mt-8 text-sm text-finance-muted italic">Content coming soon.</p>
             )}
           </article>
+
+          {/* Related Posts */}
+          {relatedPosts.length > 0 && (
+            <section className="mt-10">
+              <h2 className="text-2xl font-semibold text-finance-text">Related articles</h2>
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                {relatedPosts.map((related) => (
+                  <Link
+                    key={related.slug}
+                    href={`/learn/${related.slug}`}
+                    className="rounded-xl border border-finance-border/70 bg-finance-panel p-4 transition-colors hover:bg-finance-surface"
+                  >
+                    <p className="text-sm font-semibold text-finance-text line-clamp-2">{related.title}</p>
+                    {related.excerpt && (
+                      <p className="mt-2 text-xs text-finance-muted line-clamp-2">{related.excerpt}</p>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </>

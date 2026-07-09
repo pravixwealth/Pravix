@@ -24,6 +24,8 @@ export type PublicBlogPost = {
   seoTitle: string | null;
   seoDescription: string | null;
   ogImageUrl: string | null;
+  canonicalUrl: string | null;
+  robots: string;
   tags: string[];
 };
 
@@ -47,6 +49,7 @@ export async function getPublishedPosts(): Promise<RepoResult<PublicBlogPost[]>>
       .select(`
         id, title, slug, excerpt, published_content_html, content_json,
         featured_image_id, published_at, seo_title, seo_description, og_image_id,
+        canonical_url, robots,
         blog_authors(name, role, avatar_id),
         blog_categories(name, slug)
       `)
@@ -71,7 +74,7 @@ export async function getPublishedPosts(): Promise<RepoResult<PublicBlogPost[]>>
         excerpt: row.excerpt ?? null,
         publishedContentHtml: row.published_content_html ?? null,
         contentJson: row.content_json ?? null,
-        featuredImageUrl: null, // Resolved via media lookup if needed
+        featuredImageUrl: null,
         authorName: author?.name ?? "Pravix Team",
         authorRole: author?.role ?? null,
         authorAvatarUrl: null,
@@ -81,6 +84,8 @@ export async function getPublishedPosts(): Promise<RepoResult<PublicBlogPost[]>>
         seoTitle: row.seo_title ?? null,
         seoDescription: row.seo_description ?? null,
         ogImageUrl: null,
+        canonicalUrl: row.canonical_url ?? null,
+        robots: row.robots ?? "index,follow",
         tags: [],
       };
     });
@@ -125,6 +130,7 @@ export async function getPublishedPostBySlug(slug: string): Promise<RepoResult<P
       .select(`
         id, title, slug, excerpt, published_content_html, content_json,
         featured_image_id, published_at, seo_title, seo_description, og_image_id,
+        canonical_url, robots,
         blog_authors(name, role, avatar_id),
         blog_categories(name, slug)
       `)
@@ -159,6 +165,8 @@ export async function getPublishedPostBySlug(slug: string): Promise<RepoResult<P
       seoTitle: data.seo_title ?? null,
       seoDescription: data.seo_description ?? null,
       ogImageUrl: null,
+      canonicalUrl: data.canonical_url ?? null,
+      robots: data.robots ?? "index,follow",
       tags: [],
     };
 
