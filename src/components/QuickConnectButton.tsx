@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import { PhoneCall, CalendarDays, X, Sparkles } from "lucide-react";
-
-const CONTACT_PHONE_NUMBER = "+91 87962 15599";
-const CONTACT_PHONE_URI = "+918796215599";
-const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Hi Pravix, I want to connect regarding wealth planning, the AI dashboard, and a discovery call."
-);
-const WHATSAPP_URL = `https://wa.me/${CONTACT_PHONE_URI.replace(/^\+/, "")}?text=${WHATSAPP_MESSAGE}`;
+import { usePublicLayout } from "@/components/PublicLayoutProvider";
 
 function WhatsappIcon() {
   return (
@@ -29,6 +23,14 @@ interface QuickConnectButtonProps {
 
 export default function QuickConnectButton({ variant = "dark", label, className = "" }: QuickConnectButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const layout = usePublicLayout();
+
+  const contactPhoneUri = layout.contact.phone;
+  const whatsappNumber = (layout.contact.whatsapp || layout.contact.phone).replace(/^\+/, "");
+  const whatsappMessage = encodeURIComponent(
+    `Hi ${layout.branding.shortName}, I want to connect regarding wealth planning, the AI dashboard, and a discovery call.`
+  );
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   const baseButtonClasses =
     "group inline-flex h-12 items-center justify-center gap-0 rounded-full border px-0 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(10,25,48,0.24)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,25,48,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a1930]/40 sm:justify-between sm:gap-2 sm:px-4";
@@ -68,7 +70,7 @@ export default function QuickConnectButton({ variant = "dark", label, className 
 
             <div className="space-y-2">
               <a
-                href={`tel:${CONTACT_PHONE_URI}`}
+                href={`tel:${contactPhoneUri}`}
                 className="flex items-center gap-3 rounded-2xl border border-[#d8e7ff] bg-[#f8fbff] px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-[#c1d4fb] hover:bg-white"
                 onClick={() => setIsOpen(false)}
               >
@@ -79,7 +81,7 @@ export default function QuickConnectButton({ variant = "dark", label, className 
               </a>
 
               <a
-                href={WHATSAPP_URL}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-3 rounded-2xl border border-[#d8e7ff] bg-[#f8fbff] px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-[#c1d4fb] hover:bg-white"

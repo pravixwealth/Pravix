@@ -3,12 +3,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CalendarDays, Lock, MessageCircle, PhoneCall, Send, Sparkles, X } from "lucide-react";
 import QuickConnectButton from "./QuickConnectButton";
-
-const MAX_FREE_QUESTIONS = 3;
+import { usePublicLayout } from "@/components/PublicLayoutProvider";
 import LoadingSpinner from "./LoadingSpinner";
 import { usePathname, useRouter } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { AgentStructuredAdvice } from "@/lib/agent/types";
+
+const MAX_FREE_QUESTIONS = 3;
 
 type FloatingPravixChatProps = {
   signedIn: boolean;
@@ -35,12 +36,7 @@ type ChatMessage = {
   loading?: boolean;
 };
 
-const CONTACT_PHONE_NUMBER = "+91 87962 15599";
-const CONTACT_PHONE_URI = "+918796215599";
-const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Hi Pravix, I want to connect regarding wealth planning, the AI dashboard, and a discovery call."
-);
-const WHATSAPP_URL = `https://wa.me/${CONTACT_PHONE_URI.replace(/^\+/, "")}?text=${WHATSAPP_MESSAGE}`;
+const WHATSAPP_DEFAULT_MESSAGE = "Hi, I want to connect regarding wealth planning, the AI dashboard, and a discovery call.";
 
 function WhatsappIcon() {
   return (
@@ -63,10 +59,19 @@ function formatTime(value: string): string {
 export default function FloatingPravixChat({ signedIn, refreshKey }: FloatingPravixChatProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const layout = usePublicLayout();
   const [isOpen, setIsOpen] = useState(false);
   const [isQuickMenuOpen, setIsQuickMenuOpen] = useState(false);
   const [isBootstrapping, setIsBootstrapping] = useState(false);
   const [hasBootstrapped, setHasBootstrapped] = useState(false);
+
+  // Derive contact URLs from CMS
+  const contactPhoneUri = layout.contact.phone;
+  const whatsappNumber = (layout.contact.whatsapp || layout.contact.phone).replace(/^\+/, "");
+  const whatsappMessage = encodeURIComponent(
+    `Hi ${layout.branding.shortName}, I want to connect regarding wealth planning, the AI dashboard, and a discovery call.`
+  );
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [greeting, setGreeting] = useState("Hi, I am Pravix AI. Ask me anything about your plan.");
@@ -388,7 +393,7 @@ export default function FloatingPravixChat({ signedIn, refreshKey }: FloatingPra
 
           <div className="space-y-2">
             <a
-              href={`tel:${CONTACT_PHONE_URI}`}
+              href={`tel:${contactPhoneUri}`}
               className="flex items-center gap-3 rounded-2xl border border-[#d8e7ff] bg-[#f8fbff] px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-[#c1d4fb] hover:bg-white"
               onClick={() => setIsQuickMenuOpen(false)}
             >
@@ -399,7 +404,7 @@ export default function FloatingPravixChat({ signedIn, refreshKey }: FloatingPra
             </a>
 
             <a
-              href={WHATSAPP_URL}
+              href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-3 rounded-2xl border border-[#d8e7ff] bg-[#f8fbff] px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-[#c1d4fb] hover:bg-white"
