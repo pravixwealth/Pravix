@@ -1,18 +1,48 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getBearerToken, resolveAuthedUser } from "@/lib/agent/server";
-import { resolveAdminUser } from "@/lib/admin/repositories/auth.repository";
 import { createMedia } from "@/lib/admin/repositories/media.repository";
+import { resolveAdminUser } from "@/lib/admin/repositories/auth.repository";
 import { hasRole } from "@/lib/admin/types";
+import { cookies } from "next/headers";
 
 export const runtime = "nodejs";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml", "image/avif"];
 
+async function getAccessTokenFromCookies(): Promise<string | null> {
+  const cookieStore = await cookies();
+  const all = cookieStore.getAll();
+  const prefix = "sb-";
+  const suffix = "auth-token";
+
+  const authCookies = all
+    .filter((c) => c.name.startsWith(prefix) && c.name.includes(suffix))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  if (authCookies.length === 0) return null;
+
+  const combined = authCookies.map((c) => c.value).join("");
+
+  try {
+    let decoded = combined;
+    if (decoded.includes("%7B") || decoded.includes("%22")) {
+      decoded = decodeURIComponent(decoded);
+    }
+    if (decoded.includes("%7B") || decoded.includes("%22")) {
+      decoded = decodeURIComponent(decoded);
+    }
+    const parsed = JSON.parse(decoded);
+    return parsed?.access_token ?? null;
+  } catch {
+    return combined.length > 20 ? combined : null;
+  }
+}
+
 export async function POST(request: Request) {
   try {
-    const accessToken = getBearerToken(request);
+    // Read auth from cookie (admin session)
+    const accessToken = await getAccessTokenFromCookies();
     if (!accessToken) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -25,21 +55,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
     }
 
-    // Verify user
+    // Verify user from token
     const userClient = createClient(supabaseUrl, anonKey, {
       auth: { persistSession: false },
       global: { headers: { Authorization: `Bearer ${accessToken}` } },
     });
-    const user = await resolveAuthedUser(userClient);
-    if (!user) {
+    const { data: userData, error: userError } = await userClient.auth.getUser();
+    if (userError || !userData?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const userId = userData.user.id;
 
     // Verify admin role
     const adminClient = createClient(supabaseUrl, serviceKey, {
       auth: { persistSession: false },
     });
-    const adminResult = await resolveAdminUser(adminClient, user.id);
+    const adminResult = await resolveAdminUser(adminClient, userId);
     if (!adminResult.success || !hasRole(adminResult.data.roles, "editor")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -112,7 +144,7 @@ export async function POST(request: Request) {
       mimeType: file.type,
       extension: ext,
       sizeBytes: file.size,
-      uploadedBy: user.id,
+      uploadedBy: userId,
     });
 
     if (!mediaResult.success) {
