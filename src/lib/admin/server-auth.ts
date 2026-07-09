@@ -42,7 +42,15 @@ async function getAccessTokenFromCookies(): Promise<string | null> {
   const combined = authCookies.map((c) => c.value).join("");
 
   try {
-    const decoded = decodeURIComponent(combined);
+    let decoded = combined;
+    // Handle URL-encoded values (Next.js may encode cookie values)
+    if (decoded.includes("%7B") || decoded.includes("%22")) {
+      decoded = decodeURIComponent(decoded);
+    }
+    // Handle double-encoding
+    if (decoded.includes("%7B") || decoded.includes("%22")) {
+      decoded = decodeURIComponent(decoded);
+    }
     const parsed = JSON.parse(decoded);
     return parsed?.access_token ?? null;
   } catch {

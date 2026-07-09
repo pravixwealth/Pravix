@@ -28,11 +28,10 @@ export async function GET(request: NextRequest) {
     token_type: "bearer",
   });
 
-  const encoded = encodeURIComponent(cookieValue);
   const cookieName = `sb-${projectRef}-auth-token`;
   const maxAge = 60 * 60 * 24 * 7; // 7 days
 
-  response.cookies.set(cookieName, encoded, {
+  response.cookies.set(cookieName, cookieValue, {
     httpOnly: false,
     sameSite: "lax",
     secure: false, // localhost
