@@ -55,9 +55,6 @@ export async function POST(request: Request) {
       ? body.history.filter(isHistoryItem).map((item) => ({ role: item.role, content: item.content.trim() }))
       : [];
 
-    // DEBUG: Log the incoming history for troubleshooting repeated answers
-    console.log('[DEBUG] Incoming chat history:', JSON.stringify(history, null, 2));
-    
     // Extract optional system prompt and context
     const systemPrompt = typeof body.system === "string" ? body.system.trim() : undefined;
     const financialContext = body.context as FinancialContext | undefined;

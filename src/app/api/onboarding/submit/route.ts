@@ -160,20 +160,7 @@ export async function POST(request: Request) {
     const capacityBandRaw = (answers.monthly_investment_capacity_band ?? answers.monthlyInvestmentCapacityBand) as string | undefined;
     const incomeBandRaw = (answers.monthly_income_band ?? answers.monthlyIncomeBand) as string | undefined;
 
-    // DEBUG LOG: Log extracted values before resolution
-    console.log("[API Submit] Extracted raw values:", {
-      monthlyIncome,
-      sipCapacity,
-      horizonYears,
-      horizonBandRaw,
-      capacityBandRaw,
-      incomeBandRaw,
-      income_custom_amount: answers.income_custom_amount,
-      sip_custom_amount: answers.sip_custom_amount,
-      time_horizon_custom_years: answers.time_horizon_custom_years,
-    });
-
-    // Horizon: numeric-first, band fallback. Always emit both numeric + canonical band when resolved.
+    // Phone validation (STRICT)
     const resolvedHorizonYears = horizonYears !== null
       ? Math.round(horizonYears)
       : horizonBandToYears(horizonBandRaw);
@@ -207,17 +194,6 @@ export async function POST(request: Request) {
     } else if (typeof incomeBandRaw === "string") {
       answers.monthly_income_band = String(incomeBandRaw).toLowerCase();
     }
-
-    // DEBUG LOG: Final resolved values before sending to RPC
-    console.log("[API Submit] Final resolved values:", {
-      monthly_income_inr: answers.monthly_income_inr,
-      monthly_investable_surplus_inr: answers.monthly_investable_surplus_inr,
-      target_horizon_years: answers.target_horizon_years,
-      monthly_income_band: answers.monthly_income_band,
-      monthly_investment_capacity_band: answers.monthly_investment_capacity_band,
-      time_horizon_band: answers.time_horizon_band,
-      phone_e164: answers.phone_e164,
-    });
 
     // Phone validation (STRICT)
     const phone = answers.phone_e164;

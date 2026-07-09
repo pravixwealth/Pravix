@@ -64,7 +64,6 @@ export async function getAdminUser(): Promise<AdminUser | null> {
     const { supabaseUrl, anonKey, serviceRoleKey } = getCredentials();
 
     const accessToken = await getAccessTokenFromCookies();
-    console.log("[getAdminUser] accessToken found:", accessToken ? `${accessToken.slice(0, 20)}...` : "null");
 
     if (!accessToken) {
       return null;
@@ -77,7 +76,6 @@ export async function getAdminUser(): Promise<AdminUser | null> {
     });
 
     const { data: userData, error: userError } = await userClient.auth.getUser();
-    console.log("[getAdminUser] getUser result:", userData?.user?.email ?? "null", "error:", userError?.message ?? "none");
 
     if (userError || !userData?.user) {
       return null;
@@ -94,8 +92,6 @@ export async function getAdminUser(): Promise<AdminUser | null> {
       .from("user_roles")
       .select("roles(name)")
       .eq("user_id", userId);
-
-    console.log("[getAdminUser] roleRows:", JSON.stringify(roleRows), "error:", rolesError?.message ?? "none");
 
     if (rolesError || !roleRows || roleRows.length === 0) {
       return null;

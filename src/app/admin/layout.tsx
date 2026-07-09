@@ -16,8 +16,6 @@ export default async function AdminRootLayout({
 }) {
   const user = await getAdminUser();
 
-  console.log("[ADMIN LAYOUT] getAdminUser result:", user ? `${user.email} (${user.roles.join(",")})` : "null — redirecting to login");
-
   if (!user) {
     redirect("/admin-login");
   }
