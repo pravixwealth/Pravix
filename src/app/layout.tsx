@@ -114,24 +114,23 @@ export default async function RootLayout({
       >
         <PublicLayoutProvider data={layoutData}>
           <GoogleAnalytics />
-          {/* Organization schema — Google Knowledge Panel */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
           />
-          {/* WebSite schema — sitelinks search box */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }}
           />
-          {/* SoftwareApplication schema — product rich result */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd()) }}
           />
           <main className="flex-grow flex flex-col">{children}</main>
-          <GlobalFloatingPravixChat />
-          <Footer layoutData={layoutData} />
+          <div id="public-chrome">
+            <GlobalFloatingPravixChat />
+            <Footer layoutData={layoutData} />
+          </div>
         </PublicLayoutProvider>
       </body>
     </html>
