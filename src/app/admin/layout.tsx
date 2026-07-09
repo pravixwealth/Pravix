@@ -22,5 +22,11 @@ export default async function AdminRootLayout({
     redirect("/admin-login");
   }
 
-  return <AdminLayoutShell user={user}>{children}</AdminLayoutShell>;
+  // Override root layout styles — admin has its own full-screen shell
+  // Hide the public footer and chat via a wrapper that breaks out of the root layout flow
+  return (
+    <div className="fixed inset-0 z-[100] bg-[#f8fafb]">
+      <AdminLayoutShell user={user}>{children}</AdminLayoutShell>
+    </div>
+  );
 }
