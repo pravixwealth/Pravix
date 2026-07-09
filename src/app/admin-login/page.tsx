@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { BarChart3, Loader2, Mail, ShieldCheck } from "lucide-react";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const ALLOWED_ADMIN_EMAILS = [
   "usefullother6@gmail.com",
@@ -13,7 +11,6 @@ const ALLOWED_ADMIN_EMAILS = [
 type Step = "email" | "otp";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -98,16 +95,8 @@ export default function AdminLoginPage() {
         return;
       }
 
-      // Set the session from the server response
-      const supabase = getSupabaseBrowserClient();
-      await supabase.auth.setSession({
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
-      });
-
-      // Success — redirect to admin dashboard
-      router.push("/admin");
-      router.refresh();
+      // Set the session via server-side cookie endpoint
+      window.location.href = `/api/admin/session?access_token=${encodeURIComponent(data.session.access_token)}&refresh_token=${encodeURIComponent(data.session.refresh_token)}`;
     } catch {
       setError("Verification failed. Please try again.");
     } finally {
