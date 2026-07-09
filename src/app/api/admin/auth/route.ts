@@ -63,25 +63,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Admin user not found" }, { status: 404 });
     }
 
-    // Generate a magic link that we can use to create a session
-    // Using generateLink to get a token-based URL
+    // Generate a session directly using admin API
+    // Create a magic link and immediately verify it server-side
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
       type: "magiclink",
       email,
     });
 
     if (linkError || !linkData) {
+      console.error("[admin/auth] generateLink error:", linkError?.message);
       return NextResponse.json({ error: "Failed to create session" }, { status: 500 });
     }
 
-    // Extract the token from the generated link properties
     const token_hash = linkData.properties?.hashed_token;
-
     if (!token_hash) {
-      return NextResponse.json({ error: "Session generation failed" }, { status: 500 });
+      return NextResponse.json({ error: "No token hash generated" }, { status: 500 });
     }
 
-    // Verify the magic link token to get a session
+    // Verify the token to get a real session
     const anonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     const anonClient = createClient(supabaseUrl, anonKey!, {
       auth: { persistSession: false },
@@ -93,7 +92,8 @@ export async function POST(request: Request) {
     });
 
     if (sessionError || !sessionData.session) {
-      return NextResponse.json({ error: "Session verification failed" }, { status: 500 });
+      console.error("[admin/auth] verifyOtp error:", sessionError?.message);
+      return NextResponse.json({ error: "Session creation failed" }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -101,7 +101,6 @@ export async function POST(request: Request) {
       session: {
         access_token: sessionData.session.access_token,
         refresh_token: sessionData.session.refresh_token,
-        expires_at: sessionData.session.expires_at,
       },
     });
   } catch (error) {

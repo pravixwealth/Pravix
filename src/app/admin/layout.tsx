@@ -14,11 +14,9 @@ export default async function AdminRootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // The login page at /admin/login has its own layout that renders children directly.
-  // This layout only applies to authenticated admin pages.
-  // Next.js route groups handle this: /admin/login/layout.tsx overrides this for login.
-
   const user = await getAdminUser();
+
+  console.log("[ADMIN LAYOUT] getAdminUser result:", user ? `${user.email} (${user.roles.join(",")})` : "null — redirecting to login");
 
   if (!user) {
     redirect("/admin-login");
