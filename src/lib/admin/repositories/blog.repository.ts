@@ -81,6 +81,10 @@ export type CreatePostParams = {
   seoTitle?: string | null;
   seoDescription?: string | null;
   ogImageId?: string | null;
+  focusKeyword?: string | null;
+  canonicalUrl?: string | null;
+  robots?: string;
+  scheduledAt?: string | null;
 };
 
 export type UpdatePostParams = Partial<Omit<CreatePostParams, "slug">> & {
@@ -150,6 +154,10 @@ export async function createPost(
       seo_title: params.seoTitle ?? null,
       seo_description: params.seoDescription ?? null,
       og_image_id: params.ogImageId ?? null,
+      focus_keyword: params.focusKeyword ?? null,
+      canonical_url: params.canonicalUrl ?? null,
+      robots: params.robots ?? "index,follow",
+      scheduled_at: params.scheduledAt ?? null,
     })
     .select()
     .single();

@@ -18,7 +18,14 @@ type CreatePostBody = {
   contentHtml?: string | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
+  focusKeyword?: string | null;
+  canonicalUrl?: string | null;
+  robots?: string;
+  featuredImageId?: string | null;
+  ogImageId?: string | null;
+  tags?: string[];
   publish?: boolean;
+  scheduledAt?: string | null;
 };
 
 export async function POST(request: Request) {
@@ -77,7 +84,9 @@ export async function POST(request: Request) {
       contentJson: body.contentJson ?? null,
       seoTitle: body.seoTitle ?? null,
       seoDescription: body.seoDescription ?? null,
-      status: body.publish ? "draft" : "draft", // Always create as draft first
+      status: body.scheduledAt ? "scheduled" : "draft",
+      featuredImageId: body.featuredImageId ?? null,
+      ogImageId: body.ogImageId ?? null,
     });
 
     if (!createResult.success) {
