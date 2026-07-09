@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ImageIcon, Upload, X } from "lucide-react";
+import { useRef, useState } from "react";
+import { ImageIcon, Loader2, Upload, X } from "lucide-react";
 import type { MediaFile } from "@/lib/admin/repositories/media.repository";
 
 type MediaPickerProps = {
@@ -11,15 +11,9 @@ type MediaPickerProps = {
   placeholder?: string;
 };
 
-/**
- * Reusable Media Picker component.
- * Used by: Settings, Blog, Pages, Navigation, Testimonials, Email — everything.
- * No module implements its own image selector.
- *
- * Currently renders with a simple preview + upload placeholder.
- * Full modal browser (folder nav, search, grid) will be wired when
- * the Media Library page UI is complete.
- */
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml", "image/avif"];
+
 export function MediaPicker({
   value,
   onChange,
@@ -27,9 +21,79 @@ export function MediaPicker({
   placeholder = "Select an image",
 }: MediaPickerProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleRemove = () => {
     onChange(null);
+    setError(null);
+  };
+
+  const handleFileSelect = async (file: File) => {
+    setError(null);
+
+    // Validate
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setError("Unsupported file type. Use JPEG, PNG, WebP, GIF, SVG, or AVIF.");
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError("File too large. Maximum size is 10MB.");
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      // Upload via API
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/admin/media/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setError(data.error ?? "Upload failed");
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.media) {
+        onChange(data.media as MediaFile);
+      }
+    } catch {
+      setError("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+    // Reset input so the same file can be re-selected
+    e.target.value = "";
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
   };
 
   if (value) {
@@ -69,25 +133,49 @@ export function MediaPicker({
   }
 
   return (
-    <div
-      className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-6 py-8 transition-colors ${
-        isDragging
-          ? "border-[#2b5cff] bg-[#2b5cff]/5"
-          : "border-[#e2e8f0] bg-[#f8fafc] hover:border-[#94a3b8]"
-      }`}
-      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-      onDragLeave={() => setIsDragging(false)}
-      onDrop={(e) => { e.preventDefault(); setIsDragging(false); }}
-      role="button"
-      tabIndex={0}
-      aria-label={placeholder}
-    >
-      <Upload className="h-6 w-6 text-[#94a3b8]" />
-      <p className="mt-2 text-sm text-[#64748b]">{placeholder}</p>
-      <p className="mt-1 text-xs text-[#94a3b8]">
-        Drag & drop or click to browse
-      </p>
-    </div>
+    <>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        onChange={handleInputChange}
+        className="hidden"
+        aria-hidden="true"
+      />
+      <div
+        className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-6 py-8 transition-colors ${
+          isDragging
+            ? "border-[#2b5cff] bg-[#2b5cff]/5"
+            : "border-[#e2e8f0] bg-[#f8fafc] hover:border-[#94a3b8]"
+        }`}
+        onClick={handleClick}
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleClick(); }}
+        role="button"
+        tabIndex={0}
+        aria-label={placeholder}
+      >
+        {uploading ? (
+          <>
+            <Loader2 className="h-6 w-6 animate-spin text-[#2b5cff]" />
+            <p className="mt-2 text-sm text-[#2b5cff]">Uploading...</p>
+          </>
+        ) : (
+          <>
+            <Upload className="h-6 w-6 text-[#94a3b8]" />
+            <p className="mt-2 text-sm text-[#64748b]">{placeholder}</p>
+            <p className="mt-1 text-xs text-[#94a3b8]">
+              Drag & drop or click to browse
+            </p>
+          </>
+        )}
+      </div>
+      {error && (
+        <p className="mt-1.5 text-xs text-red-600">{error}</p>
+      )}
+    </>
   );
 }
 
