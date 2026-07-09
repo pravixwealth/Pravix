@@ -4,7 +4,22 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock3, Search } from "lucide-react";
-import type { BlogPost } from "@/app/learn/blog-data";
+
+type BlogPost = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  coverImage: string;
+  author: string;
+  role: string;
+  publishedAt: string;
+  readTime: string;
+  personalNote: string;
+  whoShouldRead: string;
+  keyTakeaways: string[];
+  tags: string[];
+  sections: unknown[];
+};
 
 type LearnBlogGridProps = {
   posts: BlogPost[];

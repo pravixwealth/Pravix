@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { usePublicLayout } from "@/components/PublicLayoutProvider";
 import {
   Area,
   AreaChart,
@@ -42,7 +43,6 @@ import {
 } from "lucide-react";
 import { FaInstagram, FaLinkedin, FaYoutube, FaFacebook } from "react-icons/fa";
 import { SocialCard } from "@/components/SocialCard";
-import { socialProfiles } from "@/lib/seo";
 const MiniSparkline = dynamic(() => import("@/components/charts/HomepageCharts").then((mod) => mod.MiniSparkline), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-white/5 animate-pulse rounded-lg" />,
@@ -53,7 +53,6 @@ const MainTrendChart = dynamic(() => import("@/components/charts/HomepageCharts"
   loading: () => <div className="h-full w-full bg-white/5 animate-pulse rounded-2xl" />,
 });
 import SiteHeader from "@/components/SiteHeader";
-import { blogPosts } from "@/app/learn/blog-data";
 
 const HeroPhoneMockup = dynamic(() => import("@/components/HeroPhoneMockup"), {
   ssr: false,
@@ -441,6 +440,13 @@ function createFeatureCardReveal(isCompactMotion: boolean) {
 }
 
 export default function HomepageClient() {
+  const layout = usePublicLayout();
+  const socialProfiles = {
+    instagram: layout.social.instagram ?? "#",
+    linkedin: layout.social.linkedin ?? "#",
+    youtube: layout.social.youtube ?? "#",
+    facebook: layout.social.facebook ?? "#",
+  };
   const [isHeroReady, setIsHeroReady] = useState(false);
   const [poweredByIndex, setPoweredByIndex] = useState(0);
   const [liveMarket, setLiveMarket] = useState<HomepageMarketPayload | null>(null);
@@ -682,7 +688,12 @@ export default function HomepageClient() {
   const sectionReveal = useMemo(() => createSectionReveal(isCompactMotion), [isCompactMotion]);
   const chartCardReveal = useMemo(() => createChartCardReveal(isCompactMotion), [isCompactMotion]);
   const featureCardReveal = useMemo(() => createFeatureCardReveal(isCompactMotion), [isCompactMotion]);
-  const featuredBlogPosts = useMemo(() => blogPosts.slice(0, 4), []);
+  const featuredBlogPosts = useMemo(() => [
+    { slug: "goal-based-investing-india-blueprint", title: "Goal-Based Investing in India: A Practical 2026 Blueprint", excerpt: "Turn major life goals into measurable monthly action by linking timelines, inflation, and risk capacity to a disciplined portfolio design.", coverImage: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-01", readTime: "12 min read", tags: ["Goal Planning", "Asset Allocation"] },
+    { slug: "section-80c-planning-without-march-panic", title: "Section 80C Planning Without March Panic", excerpt: "Structure your Section 80C investments across the fiscal year instead of panic-buying in March.", coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-08", readTime: "10 min read", tags: ["Tax Planning", "Section 80C"] },
+    { slug: "investing-during-market-volatility-discipline-over-drama", title: "Investing During Market Volatility: Discipline Over Drama", excerpt: "When markets swing wildly, the temptation to react is intense. Learn why staying disciplined beats timing the market.", coverImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-15", readTime: "9 min read", tags: ["Market Volatility", "Discipline"] },
+    { slug: "portfolio-diversification-for-indian-households", title: "Portfolio Diversification for Indian Households", excerpt: "Build a portfolio that balances growth and stability across asset classes suited to Indian market conditions.", coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-22", readTime: "11 min read", tags: ["Diversification", "Portfolio"] },
+  ], []);
 
   const sectionViewport = { once: true, amount: isCompactMotion ? 0.12 : 0.22 };
   const denseSectionViewport = { once: true, amount: isCompactMotion ? 0.1 : 0.2 };

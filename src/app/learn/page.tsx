@@ -1,61 +1,42 @@
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import LearnBlogGrid from "@/components/LearnBlogGrid";
-import { blogPosts as fallbackPosts } from "./blog-data";
 import { getPublishedPosts } from "@/lib/admin/repositories/blog-public.repository";
 import { absoluteUrl } from "@/lib/seo";
-import type { BlogPost } from "./blog-data";
 
 export const metadata: Metadata = {
   title: "Learn — Personal Wealth Notes | Pravix",
   description:
     "Real-world financial planning articles from Pravix planners and analysts. Covering goal-based investing, Section 80C, market volatility, and portfolio diversification for Indian households.",
-  alternates: {
-    canonical: "/learn",
-  },
+  alternates: { canonical: "/learn" },
   openGraph: {
     title: "Learn — Personal Wealth Notes | Pravix",
-    description:
-      "Real-world financial planning articles covering goal-based investing, tax planning, market volatility, and portfolio diversification for Indian families.",
+    description: "Real-world financial planning articles covering goal-based investing, tax planning, market volatility, and portfolio diversification for Indian families.",
     url: absoluteUrl("/learn"),
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Learn — Personal Wealth Notes | Pravix",
-    description:
-      "Real-world financial planning articles covering goal-based investing, tax planning, market volatility, and portfolio diversification for Indian families.",
   },
 };
 
 export default async function LearnPage() {
-  // Try to load from CMS database
   const result = await getPublishedPosts();
+  const posts = result.success ? result.data : [];
 
-  let posts: BlogPost[];
-
-  if (result.success && result.data.length > 0) {
-    // Convert DB posts to the shape LearnBlogGrid expects
-    posts = result.data.map((dbPost) => ({
-      slug: dbPost.slug,
-      title: dbPost.title,
-      excerpt: dbPost.excerpt ?? "",
-      coverImage: dbPost.featuredImageUrl ?? "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80",
-      author: dbPost.authorName,
-      role: dbPost.authorRole ?? "",
-      publishedAt: dbPost.publishedAt ?? new Date().toISOString(),
-      readTime: "5 min read",
-      personalNote: "",
-      whoShouldRead: "",
-      keyTakeaways: [],
-      tags: dbPost.tags,
-      sections: [],
-    }));
-  } else {
-    // Fallback: DB empty or unavailable — use hardcoded data
-    // This fallback will be removed once blog posts are seeded in production DB
-    posts = fallbackPosts;
-  }
+  // Convert DB posts to the shape LearnBlogGrid expects
+  const gridPosts = posts.map((dbPost) => ({
+    slug: dbPost.slug,
+    title: dbPost.title,
+    excerpt: dbPost.excerpt ?? "",
+    coverImage: dbPost.featuredImageUrl ?? "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80",
+    author: dbPost.authorName,
+    role: dbPost.authorRole ?? "",
+    publishedAt: dbPost.publishedAt ?? new Date().toISOString(),
+    readTime: "5 min read",
+    personalNote: "",
+    whoShouldRead: "",
+    keyTakeaways: [],
+    tags: dbPost.tags,
+    sections: [],
+  }));
 
   return (
     <>
@@ -69,8 +50,7 @@ export default async function LearnPage() {
               Real-world writing from planners and analysts who work with Indian households every day.
               Each post includes practical context, decision frameworks, and clear next steps.
             </p>
-
-            <LearnBlogGrid posts={posts} />
+            <LearnBlogGrid posts={gridPosts} />
           </section>
         </div>
       </div>
