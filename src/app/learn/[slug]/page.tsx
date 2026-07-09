@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock3 } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import { blogPosts, getBlogPostBySlug } from "../blog-data";
+import { getPublishedPostBySlug } from "@/lib/admin/repositories/blog-public.repository";
 import { absoluteUrl, siteName } from "@/lib/seo";
 
 type BlogDetailPageProps = {
@@ -77,6 +78,65 @@ function getRelatedPosts(slug: string) {
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { slug } = await params;
+
+  // Try DB first (admin-created posts with HTML content)
+  const dbResult = await getPublishedPostBySlug(slug);
+  if (dbResult.success && dbResult.data?.publishedContentHtml) {
+    const dbPost = dbResult.data;
+    return (
+      <>
+        <SiteHeader />
+        <div className="min-h-screen bg-finance-bg pb-16 pt-24">
+          <div className="mx-auto w-full max-w-4xl px-6">
+            <Link
+              href="/learn"
+              className="inline-flex items-center gap-2 text-sm font-medium text-finance-muted transition-colors hover:text-finance-text"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Learn
+            </Link>
+            <article className="mt-6 rounded-2xl border border-finance-border/70 bg-finance-panel p-8">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-finance-muted">
+                {dbPost.publishedAt && (
+                  <span>{new Date(dbPost.publishedAt).toLocaleDateString("en-IN")}</span>
+                )}
+              </div>
+              <div className="mt-4 flex items-center gap-3 rounded-xl border border-finance-border/60 bg-finance-surface/70 p-3.5">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-finance-accent/10 text-sm font-semibold text-finance-accent">
+                  {dbPost.authorName.charAt(0)}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-finance-text">{dbPost.authorName}</p>
+                  {dbPost.authorRole && <p className="text-xs text-finance-muted">{dbPost.authorRole}</p>}
+                </div>
+              </div>
+              <h1 className="mt-3 text-3xl font-semibold leading-tight text-finance-text md:text-5xl">
+                {dbPost.title}
+              </h1>
+              {dbPost.excerpt && (
+                <p className="mt-4 text-base leading-relaxed text-finance-muted md:text-lg">{dbPost.excerpt}</p>
+              )}
+              {dbPost.tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {dbPost.tags.map((tag) => (
+                    <span key={tag} className="rounded-full border border-finance-border/70 bg-finance-surface px-3 py-1 text-xs text-finance-muted">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div
+                className="prose prose-neutral mt-8 max-w-none text-finance-text prose-headings:text-finance-text prose-p:text-finance-muted prose-a:text-[#2b5cff]"
+                dangerouslySetInnerHTML={{ __html: dbPost.publishedContentHtml! }}
+              />
+            </article>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Fallback: hardcoded blog-data.ts (for posts not yet in DB)
   const post = getBlogPostBySlug(slug);
 
   if (!post) {
