@@ -4,43 +4,14 @@ import { FaInstagram, FaLinkedin, FaYoutube, FaFacebook } from "react-icons/fa";
 import type { PublicLayoutData } from "@/lib/admin/public-layout.repository";
 
 type FooterProps = {
-  layoutData?: PublicLayoutData;
+  layoutData: PublicLayoutData;
 };
 
-const defaultQuickLinks = [
-  { label: "Home", href: "/" },
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Learn", href: "/learn" },
-  { label: "Team Pravix", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Book Discovery Call", href: "/#book-discovery-call" },
-  { label: "Get Started", href: "/onboarding" },
-];
-
-const defaultResourceLinks = [
-  { label: "SIP Calculator", href: "/sip-calculator" },
-  { label: "Investment Calculator", href: "/investment-calculator" },
-  { label: "Financial Planning India", href: "/financial-planning-india" },
-  { label: "Wealth Planning Tool", href: "/wealth-planning-tool" },
-  { label: "Smart Insights", href: "/#insights" },
-  { label: "How It Works", href: "/#how-it-works" },
-];
-
-const defaultSupportLinks = [
-  { label: "Get Started", href: "/onboarding" },
-  { label: "Login", href: "/login" },
-  { label: "Create Account", href: "/create-account" },
-  { label: "Profile", href: "/profile" },
-];
-
 export default function Footer({ layoutData }: FooterProps) {
-  const quickLinks = layoutData?.nav.footerCol1.length ? layoutData.nav.footerCol1 : defaultQuickLinks;
-  const resourceLinks = layoutData?.nav.footerCol2.length ? layoutData.nav.footerCol2 : defaultResourceLinks;
-  const supportLinks = layoutData?.nav.footerCol3.length ? layoutData.nav.footerCol3 : defaultSupportLinks;
-  const companyName = layoutData?.branding.companyName ?? "Pravix Wealth Management";
-  const description = layoutData?.footer.description ?? "Goal-based wealth planning for Indian families, with dashboards, market context, and guided onboarding.";
-  const social = layoutData?.social ?? { instagram: "https://www.instagram.com/pravixwealth/", linkedin: "https://www.linkedin.com/company/pravix-wealth-management/", youtube: "https://www.youtube.com/@PRAVIXwealth", facebook: "https://www.facebook.com/people/Pravix-Wealth-Management/61588755566789/", twitter: null };
-  const copyright = layoutData?.footer.copyright ?? "© 2025 Pravix Wealth Management. All rights reserved.";
+  const { nav, branding, social, footer } = layoutData;
+  const quickLinks = nav.footerCol1;
+  const resourceLinks = nav.footerCol2;
+  const supportLinks = nav.footerCol3;
   return (
     <footer id="contact" className="mt-auto border-t border-[#e1e7f2] bg-[#081424] text-white">
       <div className="mx-auto w-full max-w-7xl px-6 py-12 md:px-10 lg:px-14">
@@ -49,10 +20,10 @@ export default function Footer({ layoutData }: FooterProps) {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#a8c1ff]">
                 <Sparkles className="h-3.5 w-3.5 text-[#8de4ff]" />
-                {companyName}
+                {branding.companyName}
               </div>
               <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#c5d1e8] md:text-base">
-                {description}
+                {footer.description}
               </p>
             </div>
 
@@ -182,7 +153,7 @@ export default function Footer({ layoutData }: FooterProps) {
           </div>
 
           <div className="flex flex-col gap-2 border-t border-white/10 pt-4 text-xs text-[#7f97bf] sm:flex-row sm:items-center sm:justify-between">
-            <p>&copy; {new Date().getFullYear()} Pravix Wealth Management. All rights reserved.</p>
+            <p>{footer.copyright}</p>
             <p>India-focused wealth planning for households and professionals.</p>
           </div>
         </div>
