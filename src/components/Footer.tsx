@@ -49,7 +49,7 @@ export default function Footer({ layoutData }: FooterProps) {
             <div>
               <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#8aa2ca]">About</h3>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#c5d1e8]">
-                Pravix helps households organize goals, tax planning, and investment decisions into one disciplined system.
+                {footer.about}
               </p>
             </div>
 
@@ -97,7 +97,7 @@ export default function Footer({ layoutData }: FooterProps) {
           </div>
 
           <div className="flex flex-col gap-3 pb-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8aa2ca]">Follow Pravix for real financial insights</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8aa2ca]">{footer.socialHeading}</p>
             <div className="flex flex-wrap items-center gap-6">
               <Link href={social.instagram ?? "#"} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2.5 text-sm font-medium text-[#8aa2ca] transition-colors hover:text-white">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-all group-hover:bg-[#E1306C] group-hover:shadow-[0_0_12px_rgba(225,48,108,0.5)]">
@@ -129,10 +129,7 @@ export default function Footer({ layoutData }: FooterProps) {
           <div className="flex flex-col gap-4 border-t border-white/10 pt-5 md:flex-row md:items-center md:justify-between">
             <div className="max-w-3xl text-xs leading-relaxed text-[#8fa3c8]">
               <p>
-                <strong className="text-white">Disclaimer:</strong> Pravix provides educational and informational content. It is not personalized investment advice.
-              </p>
-              <p className="mt-2">
-                Investments are subject to market risk. Review relevant documents carefully and consult a qualified professional before making decisions.
+                <strong className="text-white">Disclaimer:</strong> {footer.disclaimer}
               </p>
             </div>
 
@@ -154,7 +151,7 @@ export default function Footer({ layoutData }: FooterProps) {
 
           <div className="flex flex-col gap-2 border-t border-white/10 pt-4 text-xs text-[#7f97bf] sm:flex-row sm:items-center sm:justify-between">
             <p>{footer.copyright}</p>
-            <p>India-focused wealth planning for households and professionals.</p>
+            <p>{branding.tagline}</p>
           </div>
         </div>
       </div>

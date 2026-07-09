@@ -47,6 +47,9 @@ export type PublicLayoutData = {
     copyright: string;
     ctaLabel: string;
     ctaHref: string;
+    about: string;
+    socialHeading: string;
+    disclaimer: string;
   };
 };
 
@@ -90,6 +93,9 @@ const FALLBACK: PublicLayoutData = {
     copyright: "© 2025 Pravix Wealth Management. All rights reserved.",
     ctaLabel: "Book a Free Call",
     ctaHref: "/#contact-us",
+    about: "Pravix helps households organize goals, tax planning, and investment decisions into one disciplined system.",
+    socialHeading: "Follow Pravix for real financial insights",
+    disclaimer: "Pravix provides educational and informational content. It is not personalized investment advice. Investments are subject to market risk. Review relevant documents carefully and consult a qualified professional before making decisions.",
   },
 };
 
@@ -177,6 +183,9 @@ export async function getPublicLayoutData(): Promise<PublicLayoutData> {
         copyright: content.footer_copyright || FALLBACK.footer.copyright,
         ctaLabel: content.footer_cta_label || FALLBACK.footer.ctaLabel,
         ctaHref: content.footer_cta_href || FALLBACK.footer.ctaHref,
+        about: content.footer_about || FALLBACK.footer.about,
+        socialHeading: content.footer_social_heading || FALLBACK.footer.socialHeading,
+        disclaimer: content.footer_disclaimer || FALLBACK.footer.disclaimer,
       },
     };
   } catch {
