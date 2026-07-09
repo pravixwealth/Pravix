@@ -1,9 +1,9 @@
--- ============================================================================
--- COMBINED ADMIN MIGRATIONS — Paste this entire file in Supabase SQL Editor
+﻿-- ============================================================================
+-- COMBINED ADMIN MIGRATIONS â€” Paste this entire file in Supabase SQL Editor
 -- URL: https://supabase.com/dashboard/project/ntxfcrvgjfaesedyribq/sql
 -- ============================================================================
 
--- ═══ MIGRATION 1: Roles & Audit ═══════════════════════════════════════════════
+-- â•â•â• MIGRATION 1: Roles & Audit â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 CREATE TABLE IF NOT EXISTS public.roles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -56,16 +56,16 @@ CREATE INDEX IF NOT EXISTS audit_logs_created_at_idx ON public.audit_logs (creat
 
 ALTER TABLE public.roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.roles FORCE ROW LEVEL SECURITY;
-CREATE POLICY IF NOT EXISTS roles_select_authenticated ON public.roles FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS roles_select_authenticated ON public.roles; CREATE POLICY roles_select_authenticated ON public.roles FOR SELECT TO authenticated USING (true);
 
 ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_roles FORCE ROW LEVEL SECURITY;
-CREATE POLICY IF NOT EXISTS user_roles_select_own ON public.user_roles FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
+DROP POLICY IF EXISTS user_roles_select_own ON public.user_roles; CREATE POLICY user_roles_select_own ON public.user_roles FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
 
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs FORCE ROW LEVEL SECURITY;
 
--- ═══ MIGRATION 2: Media Library ══════════════════════════════════════════════
+-- â•â•â• MIGRATION 2: Media Library â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 CREATE TABLE IF NOT EXISTS public.media_folders (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -115,10 +115,10 @@ ALTER TABLE public.media_folders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.media ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.media_usage ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY IF NOT EXISTS media_select_authenticated ON public.media FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS media_folders_select_authenticated ON public.media_folders FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS media_select_authenticated ON public.media; CREATE POLICY media_select_authenticated ON public.media FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS media_folders_select_authenticated ON public.media_folders; CREATE POLICY media_folders_select_authenticated ON public.media_folders FOR SELECT TO authenticated USING (true);
 
--- ═══ MIGRATION 3: Settings Engine ═══════════════════════════════════════════
+-- â•â•â• MIGRATION 3: Settings Engine â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 CREATE TABLE IF NOT EXISTS public.business_settings (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -198,8 +198,8 @@ ALTER TABLE public.business_setting_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.system_setting_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_content_history ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY IF NOT EXISTS business_settings_public_read ON public.business_settings FOR SELECT TO anon, authenticated USING (true);
-CREATE POLICY IF NOT EXISTS site_content_public_read ON public.site_content FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS business_settings_public_read ON public.business_settings; CREATE POLICY business_settings_public_read ON public.business_settings FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS site_content_public_read ON public.site_content; CREATE POLICY site_content_public_read ON public.site_content FOR SELECT TO anon, authenticated USING (true);
 
 -- Seed business settings
 INSERT INTO public.business_settings (key, value, type, group_key, label, description, placeholder, is_required, sort_order) VALUES
@@ -207,7 +207,7 @@ INSERT INTO public.business_settings (key, value, type, group_key, label, descri
   ('company_short_name', 'Pravix', 'string', 'general', 'Short Name', 'Abbreviated name', 'Acme', true, 2),
   ('company_tagline', 'Goal-Based Wealth Planning for Indian Families', 'string', 'general', 'Tagline', 'Primary tagline', null, false, 3),
   ('site_url', 'https://pravix.in', 'url', 'general', 'Site URL', 'Canonical URL', 'https://example.com', true, 4),
-  ('copyright_text', '© 2025 Pravix Wealth Management. All rights reserved.', 'string', 'general', 'Copyright', 'Footer copyright', null, false, 5),
+  ('copyright_text', 'Â© 2025 Pravix Wealth Management. All rights reserved.', 'string', 'general', 'Copyright', 'Footer copyright', null, false, 5),
   ('logo_url', '/image/pravix-visualmark.png', 'image_url', 'branding', 'Logo', 'Primary logo', null, true, 1),
   ('primary_color', '#2b5cff', 'color', 'branding', 'Primary Color', 'Brand color', '#2b5cff', false, 3),
   ('contact_phone', '+918796215599', 'string', 'contact', 'Phone', 'Business phone', '+91XXXXXXXXXX', true, 1),
@@ -222,12 +222,12 @@ ON CONFLICT (key) DO NOTHING;
 -- Seed site content
 INSERT INTO public.site_content (key, value, type, group_key, label, description, sort_order) VALUES
   ('footer_description', 'Goal-based wealth planning for Indian families, with dashboards, market context, and guided onboarding.', 'text', 'footer', 'Footer Description', 'Company description in footer', 1),
-  ('footer_copyright', '© 2025 Pravix Wealth Management. All rights reserved.', 'string', 'footer', 'Copyright', 'Footer copyright line', 2),
+  ('footer_copyright', 'Â© 2025 Pravix Wealth Management. All rights reserved.', 'string', 'footer', 'Copyright', 'Footer copyright line', 2),
   ('footer_cta_label', 'Book a Free Call', 'string', 'footer', 'CTA Label', 'Footer CTA button text', 3),
   ('footer_cta_href', '/#contact-us', 'string', 'footer', 'CTA Link', 'Footer CTA URL', 4)
 ON CONFLICT (key) DO NOTHING;
 
--- ═══ MIGRATION 4: Navigation ════════════════════════════════════════════════
+-- â•â•â• MIGRATION 4: Navigation â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 CREATE TABLE IF NOT EXISTS public.navigation_menus (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -259,9 +259,9 @@ CREATE TABLE IF NOT EXISTS public.navigation_items (
 -- Seed menus
 INSERT INTO public.navigation_menus (id, name, location) VALUES
   ('00000000-0000-0000-0000-000000000001', 'Main Header', 'header'),
-  ('00000000-0000-0000-0000-000000000003', 'Footer — Quick Links', 'footer_col1'),
-  ('00000000-0000-0000-0000-000000000004', 'Footer — Resources', 'footer_col2'),
-  ('00000000-0000-0000-0000-000000000005', 'Footer — Support', 'footer_col3')
+  ('00000000-0000-0000-0000-000000000003', 'Footer â€” Quick Links', 'footer_col1'),
+  ('00000000-0000-0000-0000-000000000004', 'Footer â€” Resources', 'footer_col2'),
+  ('00000000-0000-0000-0000-000000000005', 'Footer â€” Support', 'footer_col3')
 ON CONFLICT (id) DO NOTHING;
 
 -- Header items
@@ -294,7 +294,7 @@ INSERT INTO public.navigation_items (menu_id, label, href, sort_order) VALUES
   ('00000000-0000-0000-0000-000000000005', 'Login', '/login', 2),
   ('00000000-0000-0000-0000-000000000005', 'Create Account', '/create-account', 3);
 
--- ═══ MIGRATION 5: Blog CMS ══════════════════════════════════════════════════
+-- â•â•â• MIGRATION 5: Blog CMS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 CREATE TABLE IF NOT EXISTS public.blog_authors (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -369,15 +369,15 @@ ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blog_post_tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blog_post_revisions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY IF NOT EXISTS blog_posts_public_read ON public.blog_posts FOR SELECT TO anon, authenticated USING (status = 'published' AND visibility = 'public');
-CREATE POLICY IF NOT EXISTS blog_authors_public_read ON public.blog_authors FOR SELECT TO anon, authenticated USING (true);
-CREATE POLICY IF NOT EXISTS blog_categories_public_read ON public.blog_categories FOR SELECT TO anon, authenticated USING (true);
-CREATE POLICY IF NOT EXISTS blog_tags_public_read ON public.blog_tags FOR SELECT TO anon, authenticated USING (true);
-CREATE POLICY IF NOT EXISTS blog_post_tags_public_read ON public.blog_post_tags FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS blog_posts_public_read ON public.blog_posts; CREATE POLICY blog_posts_public_read ON public.blog_posts FOR SELECT TO anon, authenticated USING (status = 'published' AND visibility = 'public');
+DROP POLICY IF EXISTS blog_authors_public_read ON public.blog_authors; CREATE POLICY blog_authors_public_read ON public.blog_authors FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS blog_categories_public_read ON public.blog_categories; CREATE POLICY blog_categories_public_read ON public.blog_categories FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS blog_tags_public_read ON public.blog_tags; CREATE POLICY blog_tags_public_read ON public.blog_tags FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS blog_post_tags_public_read ON public.blog_post_tags; CREATE POLICY blog_post_tags_public_read ON public.blog_post_tags FOR SELECT TO anon, authenticated USING (true);
 
 INSERT INTO public.blog_authors (name, slug, role) VALUES ('Pravix Team', 'pravix-team', 'Wealth Planning Team') ON CONFLICT (slug) DO NOTHING;
 
--- ═══ ASSIGN ADMIN ROLES ═════════════════════════════════════════════════════
+-- â•â•â• ASSIGN ADMIN ROLES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 INSERT INTO public.user_roles (user_id, role_id)
 SELECT au.id, r.id
@@ -390,3 +390,4 @@ SELECT au.id, r.id
 FROM auth.users au CROSS JOIN public.roles r
 WHERE au.email = 'pravix10@gmail.com' AND r.name = 'super_admin'
 ON CONFLICT (user_id, role_id) DO NOTHING;
+
