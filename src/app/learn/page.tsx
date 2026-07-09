@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import LearnBlogGrid from "@/components/LearnBlogGrid";
-import { blogPosts } from "./blog-data";
+import { blogPosts as fallbackPosts } from "./blog-data";
+import { getPublishedPosts } from "@/lib/admin/repositories/blog-public.repository";
 import { absoluteUrl } from "@/lib/seo";
+import type { BlogPost } from "./blog-data";
 
 export const metadata: Metadata = {
   title: "Learn — Personal Wealth Notes | Pravix",
@@ -26,7 +28,35 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LearnPage() {
+export default async function LearnPage() {
+  // Try to load from CMS database
+  const result = await getPublishedPosts();
+
+  let posts: BlogPost[];
+
+  if (result.success && result.data.length > 0) {
+    // Convert DB posts to the shape LearnBlogGrid expects
+    posts = result.data.map((dbPost) => ({
+      slug: dbPost.slug,
+      title: dbPost.title,
+      excerpt: dbPost.excerpt ?? "",
+      coverImage: dbPost.featuredImageUrl ?? "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80",
+      author: dbPost.authorName,
+      role: dbPost.authorRole ?? "",
+      publishedAt: dbPost.publishedAt ?? new Date().toISOString(),
+      readTime: "5 min read",
+      personalNote: "",
+      whoShouldRead: "",
+      keyTakeaways: [],
+      tags: dbPost.tags,
+      sections: [],
+    }));
+  } else {
+    // Fallback: DB empty or unavailable — use hardcoded data
+    // This fallback will be removed once blog posts are seeded in production DB
+    posts = fallbackPosts;
+  }
+
   return (
     <>
       <SiteHeader />
@@ -40,7 +70,7 @@ export default function LearnPage() {
               Each post includes practical context, decision frameworks, and clear next steps.
             </p>
 
-            <LearnBlogGrid posts={blogPosts} />
+            <LearnBlogGrid posts={posts} />
           </section>
         </div>
       </div>
