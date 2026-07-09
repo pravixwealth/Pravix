@@ -16,6 +16,7 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,20 +36,17 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const supabase = getSupabaseBrowserClient();
-      const { error: otpError } = await supabase.auth.signInWithOtp({
-        email: normalizedEmail,
-        options: {
-          shouldCreateUser: false,
-        },
+      // Use the existing custom OTP system (Resend email)
+      const response = await fetch("/api/auth/send-verification-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: normalizedEmail }),
       });
 
-      if (otpError) {
-        if (otpError.message.toLowerCase().includes("rate")) {
-          setError("Too many attempts. Please wait a minute and try again.");
-        } else {
-          setError(otpError.message);
-        }
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error ?? "Failed to send verification code.");
         return;
       }
 
@@ -82,16 +80,49 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const supabase = getSupabaseBrowserClient();
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        email: email.trim().toLowerCase(),
-        token: otp,
-        type: "email",
+      const normalizedEmail = email.trim().toLowerCase();
+
+      // Verify OTP via custom endpoint
+      const response = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: normalizedEmail,
+          token: otp,
+          password: password || undefined,
+        }),
       });
 
-      if (verifyError) {
-        setError("Invalid or expired code. Please try again.");
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setError(data.error ?? "Invalid or expired code. Please try again.");
         return;
+      }
+
+      // If verify-email returned a session, set it
+      if (data.session?.access_token && data.session?.refresh_token) {
+        const supabase = getSupabaseBrowserClient();
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+      } else {
+        // Fallback: try to sign in with password if session wasn't returned
+        if (password) {
+          const supabase = getSupabaseBrowserClient();
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: normalizedEmail,
+            password,
+          });
+          if (signInError) {
+            setError("OTP verified but sign-in failed. Please try logging in normally.");
+            return;
+          }
+        } else {
+          setError("OTP verified. Please enter your password to complete sign-in.");
+          return;
+        }
       }
 
       // Success — redirect to admin dashboard
@@ -137,6 +168,21 @@ export default function AdminLoginPage() {
                     className="w-full rounded-lg border border-[#e2e8f0] bg-white py-2.5 pl-10 pr-3 text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="admin-password" className="block text-sm font-medium text-[#0f172a]">
+                  Password
+                </label>
+                <input
+                  id="admin-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Your account password"
+                  className="mt-1.5 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2.5 text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20"
+                />
+                <p className="mt-1 text-[11px] text-[#94a3b8]">Required to complete sign-in after OTP verification.</p>
               </div>
 
               {error && (
