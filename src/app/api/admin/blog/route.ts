@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getBearerToken, resolveAuthedUser } from "@/lib/agent/server";
+import { cookies } from "next/headers";
 import { resolveAdminUser } from "@/lib/admin/repositories/auth.repository";
 import { createPost, publishPost } from "@/lib/admin/repositories/blog.repository";
 import { trackUsage } from "@/lib/admin/repositories/media.repository";
@@ -8,6 +8,22 @@ import { createAuditLog } from "@/lib/admin/repositories/audit.repository";
 import { hasRole } from "@/lib/admin/types";
 
 export const runtime = "nodejs";
+
+async function getAccessTokenFromCookies(): Promise<string | null> {
+  const cookieStore = await cookies();
+  const all = cookieStore.getAll();
+  const authCookies = all
+    .filter((c) => c.name.startsWith("sb-") && c.name.includes("auth-token"))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  if (authCookies.length === 0) return null;
+  const combined = authCookies.map((c) => c.value).join("");
+  try {
+    let decoded = combined;
+    if (decoded.includes("%7B") || decoded.includes("%22")) decoded = decodeURIComponent(decoded);
+    if (decoded.includes("%7B") || decoded.includes("%22")) decoded = decodeURIComponent(decoded);
+    return JSON.parse(decoded)?.access_token ?? null;
+  } catch { return combined.length > 20 ? combined : null; }
+}
 
 type CreatePostBody = {
   title?: string;
@@ -31,7 +47,7 @@ type CreatePostBody = {
 
 export async function POST(request: Request) {
   try {
-    const accessToken = getBearerToken(request);
+    const accessToken = await getAccessTokenFromCookies();
     if (!accessToken) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -49,11 +65,12 @@ export async function POST(request: Request) {
       global: { headers: { Authorization: `Bearer ${accessToken}` } },
     });
 
-    const user = await resolveAuthedUser(userClient);
-    if (!user) {
+    const { data: userData, error: userError } = await userClient.auth.getUser();
+    if (userError || !userData?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const user = userData.user;
     const adminClient = createClient(supabaseUrl, serviceKey, {
       auth: { persistSession: false },
     });
