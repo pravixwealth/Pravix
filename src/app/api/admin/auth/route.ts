@@ -71,6 +71,20 @@ export async function POST(request: Request) {
       }
 
       user = newUser.user;
+
+      // Auto-assign super_admin role to newly created whitelisted admin
+      const { data: superAdminRole } = await supabase
+        .from("roles")
+        .select("id")
+        .eq("name", "super_admin")
+        .single();
+
+      if (superAdminRole) {
+        await supabase.from("user_roles").upsert(
+          { user_id: user.id, role_id: superAdminRole.id },
+          { onConflict: "user_id,role_id" }
+        );
+      }
     }
 
     // Generate a session directly using admin API
