@@ -33,6 +33,7 @@ const NAV_GROUPS: NavGroup[] = [
     label: "",
     items: [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard, requiredRole: "viewer" },
+      { label: "Users", href: "/admin/users", icon: Users, requiredRole: "admin" },
     ],
   },
   {
@@ -53,12 +54,6 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Navigation", href: "/admin/navigation", icon: Globe, requiredRole: "admin" },
       { label: "Site Content", href: "/admin/content", icon: FileText, requiredRole: "admin" },
       { label: "Settings", href: "/admin/settings", icon: Settings, requiredRole: "admin" },
-    ],
-  },
-  {
-    label: "",
-    items: [
-      { label: "Users", href: "/admin/users", icon: Users, requiredRole: "admin" },
     ],
   },
   {
