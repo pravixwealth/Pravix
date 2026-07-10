@@ -84,16 +84,55 @@ export async function POST(request: Request) {
       contentJson: body.contentJson ?? null,
       seoTitle: body.seoTitle ?? null,
       seoDescription: body.seoDescription ?? null,
+      focusKeyword: body.focusKeyword ?? null,
+      canonicalUrl: body.canonicalUrl ?? null,
+      robots: body.robots ?? "index,follow",
       status: body.scheduledAt ? "scheduled" : "draft",
+      scheduledAt: body.scheduledAt ?? null,
       featuredImageId: body.featuredImageId ?? null,
       ogImageId: body.ogImageId ?? null,
     });
 
     if (!createResult.success) {
+      // Friendly slug duplicate error
+      if (createResult.error.includes("duplicate") || createResult.error.includes("unique")) {
+        return NextResponse.json({ error: "This URL slug already exists. Choose a different one." }, { status: 400 });
+      }
       return NextResponse.json({ error: createResult.error }, { status: 400 });
     }
 
     const post = createResult.data;
+
+    // Save tags
+    if (Array.isArray(body.tags) && body.tags.length > 0) {
+      for (const tagName of body.tags) {
+        // Find or create tag
+        let tagId: string | null = null;
+        const { data: existingTag } = await adminClient
+          .from("blog_tags")
+          .select("id")
+          .eq("name", tagName)
+          .single();
+
+        if (existingTag) {
+          tagId = existingTag.id;
+        } else {
+          const slug = tagName.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+          const { data: newTag } = await adminClient
+            .from("blog_tags")
+            .insert({ name: tagName, slug })
+            .select("id")
+            .single();
+          tagId = newTag?.id ?? null;
+        }
+
+        if (tagId) {
+          await adminClient
+            .from("blog_post_tags")
+            .upsert({ post_id: post.id, tag_id: tagId }, { onConflict: "post_id,tag_id" });
+        }
+      }
+    }
 
     // If publishing, freeze content into published fields
     if (body.publish && body.contentHtml) {
