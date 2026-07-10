@@ -51,7 +51,8 @@ export async function getPublishedPosts(): Promise<RepoResult<PublicBlogPost[]>>
         featured_image_id, published_at, seo_title, seo_description, og_image_id,
         canonical_url, robots,
         blog_authors(name, role, avatar_id),
-        blog_categories(name, slug)
+        blog_categories(name, slug),
+        media!blog_posts_featured_image_id_fkey(public_url)
       `)
       .eq("status", "published")
       .eq("visibility", "public")
@@ -66,6 +67,8 @@ export async function getPublishedPosts(): Promise<RepoResult<PublicBlogPost[]>>
       const author = Array.isArray(authorArr) ? authorArr[0] ?? null : authorArr;
       const categoryArr = row.blog_categories as Array<{ name: string; slug: string }> | null;
       const category = Array.isArray(categoryArr) ? categoryArr[0] ?? null : categoryArr;
+      const mediaArr = row.media as Array<{ public_url: string }> | { public_url: string } | null;
+      const media = Array.isArray(mediaArr) ? mediaArr[0] : mediaArr;
 
       return {
         id: row.id,
@@ -74,7 +77,7 @@ export async function getPublishedPosts(): Promise<RepoResult<PublicBlogPost[]>>
         excerpt: row.excerpt ?? null,
         publishedContentHtml: row.published_content_html ?? null,
         contentJson: row.content_json ?? null,
-        featuredImageUrl: null,
+        featuredImageUrl: media?.public_url ?? null,
         authorName: author?.name ?? "Pravix Team",
         authorRole: author?.role ?? null,
         authorAvatarUrl: null,
@@ -132,7 +135,8 @@ export async function getPublishedPostBySlug(slug: string): Promise<RepoResult<P
         featured_image_id, published_at, seo_title, seo_description, og_image_id,
         canonical_url, robots,
         blog_authors(name, role, avatar_id),
-        blog_categories(name, slug)
+        blog_categories(name, slug),
+        media!blog_posts_featured_image_id_fkey(public_url)
       `)
       .eq("slug", slug)
       .eq("status", "published")
@@ -147,6 +151,8 @@ export async function getPublishedPostBySlug(slug: string): Promise<RepoResult<P
     const author = Array.isArray(authorArr) ? authorArr[0] ?? null : authorArr;
     const categoryArr = data.blog_categories as Array<{ name: string; slug: string }> | null;
     const category = Array.isArray(categoryArr) ? categoryArr[0] ?? null : categoryArr;
+    const mediaArr = data.media as Array<{ public_url: string }> | { public_url: string } | null;
+    const media = Array.isArray(mediaArr) ? mediaArr[0] : mediaArr;
 
     const post: PublicBlogPost = {
       id: data.id,
@@ -155,7 +161,7 @@ export async function getPublishedPostBySlug(slug: string): Promise<RepoResult<P
       excerpt: data.excerpt ?? null,
       publishedContentHtml: data.published_content_html ?? null,
       contentJson: data.content_json ?? null,
-      featuredImageUrl: null,
+      featuredImageUrl: media?.public_url ?? null,
       authorName: author?.name ?? "Pravix Team",
       authorRole: author?.role ?? null,
       authorAvatarUrl: null,
