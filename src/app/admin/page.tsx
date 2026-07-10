@@ -20,7 +20,7 @@ export default async function AdminDashboardPage() {
     listPosts(supabase),
     listMedia(supabase, { perPage: 1 }),
     listAuditLogs(supabase, { perPage: 5 }),
-    supabase.from("profiles").select("id", { count: "exact", head: true }),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).neq("status", "disabled"),
   ]);
 
   const totalPosts = postsResult.success ? postsResult.data.total : 0;

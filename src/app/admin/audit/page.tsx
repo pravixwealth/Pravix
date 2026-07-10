@@ -30,6 +30,18 @@ export default async function AuditLogsPage() {
   const entries = result.success ? result.data.entries : [];
   const total = result.success ? result.data.total : 0;
 
+  // Fetch user emails for audit entries
+  const userIds = [...new Set(entries.map((e) => e.userId))];
+  let emailMap = new Map<string, string>();
+  if (userIds.length > 0) {
+    const { data: users } = await supabase.auth.admin.listUsers({ perPage: 200 });
+    if (users?.users) {
+      for (const u of users.users) {
+        emailMap.set(u.id, u.email ?? "Unknown");
+      }
+    }
+  }
+
   return (
     <div>
       <PageHeader
@@ -63,6 +75,9 @@ export default async function AuditLogsPage() {
                     </span>
                     <span className="text-sm text-[#0f172a]">
                       {entry.entityType.replace(/_/g, " ")}
+                    </span>
+                    <span className="text-xs text-[#94a3b8]">
+                      by {emailMap.get(entry.userId)?.split("@")[0] ?? "unknown"}
                     </span>
                   </div>
                   {entry.newValue && (
