@@ -14,6 +14,7 @@ export function SettingsGroupPage({ entries, groupKey, table }: SettingsGroupPag
     const response = await fetch("/api/admin/settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ table, updates }),
     });
 

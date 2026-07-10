@@ -8,6 +8,7 @@ export function SiteContentFormClient({ entries }: { entries: SettingEntry[] }) 
     const response = await fetch("/api/admin/settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ table: "content", updates }),
     });
 

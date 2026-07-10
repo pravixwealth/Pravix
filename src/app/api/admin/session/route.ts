@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
   response.cookies.set(cookieName, cookieValue, {
     httpOnly: false,
     sameSite: "lax",
-    secure: false, // localhost
+    secure: process.env.NODE_ENV === "production",
     maxAge,
     path: "/",
   });
