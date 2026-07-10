@@ -149,9 +149,21 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
             )}
 
+            {/* Hero / Featured Image */}
+            {post.featuredImageUrl && (
+              <div className="mt-6 overflow-hidden rounded-xl border border-finance-border/60">
+                <img
+                  src={post.featuredImageUrl}
+                  alt={post.title}
+                  className="w-full max-h-[420px] object-cover"
+                  loading="eager"
+                />
+              </div>
+            )}
+
             {post.publishedContentHtml ? (
               <div
-                className="prose prose-neutral mt-8 max-w-none text-finance-text prose-headings:text-finance-text prose-p:text-finance-muted prose-a:text-[#2b5cff]"
+                className="prose prose-lg prose-neutral mt-8 max-w-none text-finance-text prose-headings:font-semibold prose-headings:text-finance-text prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-finance-muted prose-p:leading-relaxed prose-p:mb-4 prose-li:text-finance-muted prose-li:leading-relaxed prose-ul:my-4 prose-ol:my-4 prose-a:text-[#2b5cff] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:my-6 prose-blockquote:border-[#2b5cff] prose-blockquote:bg-[#f8faff] prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-blockquote:text-finance-muted"
                 dangerouslySetInnerHTML={{ __html: post.publishedContentHtml }}
               />
             ) : (
