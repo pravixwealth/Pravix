@@ -59,7 +59,6 @@ import {
 import SiteHeader from "@/components/SiteHeader";
 import AuthPanel from "@/components/AuthPanel";
 import RequireAuth from "@/components/RequireAuth";
-import DebugPanel from "@/components/DebugPanel";
 import { FollowUpPanel } from "@/components/FollowUpPanel";
 import ExecutiveIntelligencePanel from "@/components/ExecutiveIntelligencePanel";
 import HoldingsAnalyzerPanel from "@/components/HoldingsAnalyzerPanel";
@@ -4441,13 +4440,6 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
-
-        <DebugPanel
-          rawAnswers={profile}
-          apiPayload={null}
-          snapshot={financialSummary}
-          explanation={explanation}
-        />
 
         {selectedKpi ? (
           <div className="fixed inset-0 z-40">
