@@ -4,6 +4,8 @@ import LearnBlogGrid from "@/components/LearnBlogGrid";
 import { getPublishedPosts } from "@/lib/admin/repositories/blog-public.repository";
 import { absoluteUrl } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Learn — Personal Wealth Notes | Pravix",
   description:

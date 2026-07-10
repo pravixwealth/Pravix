@@ -6,6 +6,8 @@ import SiteHeader from "@/components/SiteHeader";
 import { getPublishedPosts, getPublishedPostBySlug } from "@/lib/admin/repositories/blog-public.repository";
 import { absoluteUrl, siteName } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+
 type BlogDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
