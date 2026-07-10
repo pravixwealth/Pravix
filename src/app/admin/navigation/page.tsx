@@ -3,6 +3,7 @@ import { requireRole } from "@/lib/admin/server-auth";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { listMenus, getMenuItemsAdmin } from "@/lib/admin/repositories/navigation.repository";
 import type { NavMenu, NavItem } from "@/lib/admin/repositories/navigation.repository";
+import { AddNavItemButton, NavItemActionButtons } from "./NavItemActions";
 
 export default async function NavigationManagerPage() {
   await requireRole("admin");
@@ -81,6 +82,7 @@ export default async function NavigationManagerPage() {
                       <span className="rounded bg-[#f8fafc] px-1.5 py-0.5 text-[10px] text-[#94a3b8]">
                         {item.variant}
                       </span>
+                      <NavItemActionButtons item={item} />
                     </div>
                   </div>
                 ))}
@@ -88,6 +90,8 @@ export default async function NavigationManagerPage() {
             ) : (
               <p className="mt-4 text-sm text-[#94a3b8]">No items in this menu yet.</p>
             )}
+
+            <AddNavItemButton menuId={menu.id} />
           </section>
         ))}
       </div>

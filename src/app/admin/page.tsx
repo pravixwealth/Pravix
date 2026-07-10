@@ -16,11 +16,12 @@ export default async function AdminDashboardPage() {
   );
 
   // Parallel fetch all dashboard data
-  const [postsResult, mediaResult, auditResult, usersResult] = await Promise.all([
-    listPosts(supabase),
+  const [postsResult, mediaResult, auditResult, usersResult, recentUsersResult] = await Promise.all([
+    listPosts(supabase, { perPage: 100 }),
     listMedia(supabase, { perPage: 1 }),
-    listAuditLogs(supabase, { perPage: 5 }),
+    listAuditLogs(supabase, { perPage: 8 }),
     supabase.from("profiles").select("id", { count: "exact", head: true }).neq("status", "disabled"),
+    supabase.from("profiles").select("full_name, email, created_at").order("created_at", { ascending: false }).limit(5),
   ]);
 
   const totalPosts = postsResult.success ? postsResult.data.total : 0;
@@ -77,6 +78,26 @@ export default async function AdminDashboardPage() {
           <div className="mt-3 rounded-xl border border-dashed border-[#e2e8f0] bg-[#f8fafc] px-6 py-10 text-center">
             <p className="text-sm text-[#64748b]">No activity yet. Start by creating a blog post or updating settings.</p>
           </div>
+        )}
+      </div>
+
+      {/* Recent Signups */}
+      <div className="mt-8">
+        <h2 className="text-base font-semibold text-[#0f172a]">Recent Signups</h2>
+        {recentUsersResult.data && recentUsersResult.data.length > 0 ? (
+          <div className="mt-3 divide-y divide-[#f1f5f9] rounded-xl border border-[#e2e8f0] bg-white">
+            {recentUsersResult.data.map((u: { full_name: string; email: string; created_at: string }, i: number) => (
+              <div key={i} className="flex items-center justify-between px-5 py-3">
+                <div>
+                  <p className="text-sm font-medium text-[#0f172a]">{u.full_name || "—"}</p>
+                  <p className="text-xs text-[#94a3b8]">{u.email}</p>
+                </div>
+                <span className="text-xs text-[#94a3b8]">{new Date(u.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-[#94a3b8]">No signups yet.</p>
         )}
       </div>
     </div>
