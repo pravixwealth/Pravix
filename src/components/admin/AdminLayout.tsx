@@ -86,7 +86,7 @@ export default function AdminLayoutShell({ user, children }: AdminLayoutProps) {
     <div className="flex h-screen overflow-hidden bg-[#f8fafb]">
       {/* Sidebar */}
       <aside
-        className="fixed inset-y-0 left-0 z-40 w-64 border-r border-[#e8edf3] bg-white lg:static"
+        className="w-64 shrink-0 border-r border-[#e8edf3] bg-white"
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
