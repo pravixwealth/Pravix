@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import HomepageWrapper from "@/components/HomepageWrapper";
+import { getPublishedPosts } from "@/lib/admin/repositories/blog-public.repository";
 import {
   absoluteUrl,
   defaultOgImage,
@@ -53,7 +54,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const postsResult = await getPublishedPosts();
+  const blogPosts = postsResult.success
+    ? postsResult.data.slice(0, 6).map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt ?? "",
+        coverImage: p.featuredImageUrl ?? "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80",
+        author: p.authorName,
+        role: p.authorRole ?? "",
+        publishedAt: p.publishedAt ?? new Date().toISOString(),
+        readTime: "5 min read",
+        personalNote: "",
+        whoShouldRead: "",
+        keyTakeaways: [],
+        tags: p.tags,
+        sections: [],
+      }))
+    : [];
+
   return (
     <>
       {/* WebPage schema — page-specific structured data */}
@@ -81,7 +101,7 @@ export default function HomePage() {
       </div>
 
       {/* Full interactive homepage (client-side) */}
-      <HomepageWrapper />
+      <HomepageWrapper blogPosts={blogPosts} />
     </>
   );
 }

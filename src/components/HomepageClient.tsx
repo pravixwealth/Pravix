@@ -53,6 +53,7 @@ const MainTrendChart = dynamic(() => import("@/components/charts/HomepageCharts"
   loading: () => <div className="h-full w-full bg-white/5 animate-pulse rounded-2xl" />,
 });
 import SiteHeader from "@/components/SiteHeader";
+import LearnBlogGrid from "@/components/LearnBlogGrid";
 
 const HeroPhoneMockup = dynamic(() => import("@/components/HeroPhoneMockup"), {
   ssr: false,
@@ -439,7 +440,25 @@ function createFeatureCardReveal(isCompactMotion: boolean) {
   };
 }
 
-export default function HomepageClient() {
+type HomepageClientProps = {
+  blogPosts?: Array<{
+    slug: string;
+    title: string;
+    excerpt: string;
+    coverImage: string;
+    author: string;
+    role: string;
+    publishedAt: string;
+    readTime: string;
+    personalNote: string;
+    whoShouldRead: string;
+    keyTakeaways: string[];
+    tags: string[];
+    sections: unknown[];
+  }>;
+};
+
+export default function HomepageClient({ blogPosts }: HomepageClientProps) {
   const layout = usePublicLayout();
   const socialProfiles = {
     instagram: layout.social.instagram ?? "#",
@@ -688,12 +707,7 @@ export default function HomepageClient() {
   const sectionReveal = useMemo(() => createSectionReveal(isCompactMotion), [isCompactMotion]);
   const chartCardReveal = useMemo(() => createChartCardReveal(isCompactMotion), [isCompactMotion]);
   const featureCardReveal = useMemo(() => createFeatureCardReveal(isCompactMotion), [isCompactMotion]);
-  const featuredBlogPosts = useMemo(() => [
-    { slug: "goal-based-investing-india-blueprint", title: "Goal-Based Investing in India: A Practical 2026 Blueprint", excerpt: "Turn major life goals into measurable monthly action by linking timelines, inflation, and risk capacity to a disciplined portfolio design.", coverImage: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-01", readTime: "12 min read", tags: ["Goal Planning", "Asset Allocation"] },
-    { slug: "section-80c-planning-without-march-panic", title: "Section 80C Planning Without March Panic", excerpt: "Structure your Section 80C investments across the fiscal year instead of panic-buying in March.", coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-08", readTime: "10 min read", tags: ["Tax Planning", "Section 80C"] },
-    { slug: "investing-during-market-volatility-discipline-over-drama", title: "Investing During Market Volatility: Discipline Over Drama", excerpt: "When markets swing wildly, the temptation to react is intense. Learn why staying disciplined beats timing the market.", coverImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-15", readTime: "9 min read", tags: ["Market Volatility", "Discipline"] },
-    { slug: "portfolio-diversification-for-indian-households", title: "Portfolio Diversification for Indian Households", excerpt: "Build a portfolio that balances growth and stability across asset classes suited to Indian market conditions.", coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80", publishedAt: "2026-04-22", readTime: "11 min read", tags: ["Diversification", "Portfolio"] },
-  ], []);
+  const featuredBlogPosts = blogPosts ?? [];
 
   const sectionViewport = { once: true, amount: isCompactMotion ? 0.12 : 0.22 };
   const denseSectionViewport = { once: true, amount: isCompactMotion ? 0.1 : 0.2 };
@@ -2136,6 +2150,9 @@ export default function HomepageClient() {
         {/* ═══════════════════════════════════════════════════════════════════
             SECTION: BLOG — Premium Redesign
             ═══════════════════════════════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════════════════════════════
+              BLOG — Dynamic posts from database
+              ═══════════════════════════════════════════════════════════════════ */}
         <motion.section
           id="blog"
           className="relative overflow-hidden py-28 md:py-36"
@@ -2145,8 +2162,6 @@ export default function HomepageClient() {
           whileInView="show"
           viewport={denseSectionViewport}
         >
-          <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(43,92,255,0.04),transparent_65%)]" />
-
           <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-14">
             <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
@@ -2163,55 +2178,14 @@ export default function HomepageClient() {
                 href="/learn"
                 className="group inline-flex items-center gap-2 self-start rounded-full border border-[#2b5cff]/20 bg-white px-6 py-3 text-sm font-semibold text-[#2b5cff] shadow-[0_4px_16px_rgba(43,92,255,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(43,92,255,0.16)]"
               >
-                Browse all articles
+                View all articles
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
 
-            <motion.div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4" initial="hidden" whileInView="show" viewport={denseSectionViewport}>
-              {featuredBlogPosts.map((post, index) => (
-                <motion.article
-                  key={post.slug}
-                  className="group overflow-hidden rounded-[1.4rem] border border-[#e2ebff] bg-white shadow-[0_8px_28px_rgba(43,92,255,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_48px_rgba(43,92,255,0.14)]"
-                  variants={featureCardReveal}
-                  custom={index}
-                >
-                  <div className="overflow-hidden">
-                    <Image
-                      src={post.coverImage}
-                      alt={post.title}
-                      width={1600}
-                      height={900}
-                      className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center justify-between text-[11px] text-[#5f7396]">
-                      <span>{new Date(post.publishedAt).toLocaleDateString("en-IN")}</span>
-                      <span className="rounded-full bg-[#f0f5ff] px-2 py-0.5 font-medium">{post.readTime}</span>
-                    </div>
-                    <h3 className="mt-2.5 line-clamp-2 text-lg font-bold text-[#0a1930] transition-colors group-hover:text-[#2b5cff]">{post.title}</h3>
-                    <p className="mt-2 line-clamp-3 text-[13px] leading-relaxed text-[#586987]">{post.excerpt}</p>
-
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {post.tags.slice(0, 2).map((tag) => (
-                        <span key={tag} className="rounded-full border border-[#2b5cff]/15 bg-[#f0f5ff] px-2.5 py-1 text-[10px] font-semibold text-[#2b5cff]">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <Link
-                      href={`/learn/${post.slug}`}
-                      className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2b5cff] transition-colors group-hover:text-[#0066cc]"
-                    >
-                      Read article
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </div>
-                </motion.article>
-              ))}
-            </motion.div>
+            <div className="mt-8">
+              <LearnBlogGrid posts={featuredBlogPosts} />
+            </div>
           </div>
         </motion.section>
 

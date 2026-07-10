@@ -16,6 +16,24 @@ const HomepageClient = dynamic(() => import("@/components/HomepageClient"), {
   ),
 });
 
-export default function HomepageWrapper() {
-  return <HomepageClient />;
+type HomepageWrapperProps = {
+  blogPosts?: Array<{
+    slug: string;
+    title: string;
+    excerpt: string;
+    coverImage: string;
+    author: string;
+    role: string;
+    publishedAt: string;
+    readTime: string;
+    personalNote: string;
+    whoShouldRead: string;
+    keyTakeaways: string[];
+    tags: string[];
+    sections: unknown[];
+  }>;
+};
+
+export default function HomepageWrapper({ blogPosts }: HomepageWrapperProps) {
+  return <HomepageClient blogPosts={blogPosts} />;
 }
