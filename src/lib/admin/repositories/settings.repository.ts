@@ -38,11 +38,13 @@ export type SettingHistoryEntry = {
 
 // ── Table Selector ───────────────────────────────────────────────────────────
 
-type SettingsTable = "business_settings" | "system_settings";
-type HistoryTable = "business_setting_history" | "system_setting_history";
+type SettingsTable = "business_settings" | "system_settings" | "site_content";
+type HistoryTable = "business_setting_history" | "system_setting_history" | "site_content_history";
 
 function historyTableFor(table: SettingsTable): HistoryTable {
-  return table === "business_settings" ? "business_setting_history" : "system_setting_history";
+  if (table === "business_settings") return "business_setting_history";
+  if (table === "system_settings") return "system_setting_history";
+  return "site_content_history";
 }
 
 // ── Row Mapper ───────────────────────────────────────────────────────────────
@@ -158,8 +160,9 @@ export async function updateSetting(
 
   // Record history
   const historyTable = historyTableFor(table);
+  const historyFkColumn = table === "site_content" ? "content_id" : "setting_id";
   await supabase.from(historyTable).insert({
-    setting_id: current.id,
+    [historyFkColumn]: current.id,
     old_value: oldValue,
     new_value: newValue,
     changed_by: changedBy,

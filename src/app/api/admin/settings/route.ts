@@ -11,7 +11,7 @@ import type { RoleName } from "@/lib/admin/types";
 export const runtime = "nodejs";
 
 type PatchBody = {
-  table?: "business" | "system";
+  table?: "business" | "system" | "content";
   updates?: Array<{ key: string; value: string | null }>;
 };
 
@@ -52,7 +52,10 @@ export async function PATCH(request: Request) {
     }
 
     const body = (await request.json()) as PatchBody;
-    const tableName = body.table === "system" ? "system_settings" : "business_settings";
+    let tableName: string;
+    if (body.table === "system") tableName = "system_settings";
+    else if (body.table === "content") tableName = "site_content";
+    else tableName = "business_settings";
 
     // System settings require super_admin
     const requiredRole: RoleName = body.table === "system" ? "super_admin" : "admin";
@@ -66,7 +69,7 @@ export async function PATCH(request: Request) {
 
     const result = await updateSettingsBatch(
       adminClient,
-      tableName,
+      tableName as "business_settings" | "system_settings" | "site_content",
       body.updates,
       user.id
     );
