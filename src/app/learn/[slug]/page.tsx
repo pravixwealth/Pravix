@@ -161,10 +161,45 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
             )}
 
+            {/* Auto Table of Contents */}
+            {post.publishedContentHtml && (() => {
+              const headingRegex = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
+              const headings: Array<{ level: number; text: string; id: string }> = [];
+              let match;
+              while ((match = headingRegex.exec(post.publishedContentHtml!)) !== null) {
+                const text = match[2].replace(/<[^>]*>/g, "").trim();
+                if (text) {
+                  headings.push({ level: parseInt(match[1]), text, id: text.toLowerCase().replace(/[^a-z0-9]+/g, "-") });
+                }
+              }
+              if (headings.length < 3) return null;
+              return (
+                <nav className="mt-6 rounded-xl border border-finance-border/60 bg-finance-surface/50 p-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-finance-muted">Table of Contents</p>
+                  <ol className="mt-3 space-y-1.5">
+                    {headings.map((h, i) => (
+                      <li key={i} className={h.level === 3 ? "ml-4" : ""}>
+                        <a href={`#${h.id}`} className="text-sm text-finance-accent hover:underline">{h.text}</a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              );
+            })()}
+
             {post.publishedContentHtml ? (
               <div
                 className="prose prose-lg prose-neutral mt-8 max-w-none text-finance-text prose-headings:font-semibold prose-headings:text-finance-text prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-finance-muted prose-p:leading-relaxed prose-p:mb-4 prose-li:text-finance-muted prose-li:leading-relaxed prose-ul:my-4 prose-ol:my-4 prose-a:text-[#2b5cff] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:my-6 prose-blockquote:border-[#2b5cff] prose-blockquote:bg-[#f8faff] prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-blockquote:text-finance-muted"
-                dangerouslySetInnerHTML={{ __html: post.publishedContentHtml }}
+                dangerouslySetInnerHTML={{
+                  __html: post.publishedContentHtml.replace(
+                    /<h([23])([^>]*)>(.*?)<\/h([23])>/gi,
+                    (_, level, attrs, content) => {
+                      const text = content.replace(/<[^>]*>/g, "").trim();
+                      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                      return `<h${level}${attrs} id="${id}">${content}</h${level}>`;
+                    }
+                  )
+                }}
               />
             ) : (
               <p className="mt-8 text-sm text-finance-muted italic">Content coming soon.</p>

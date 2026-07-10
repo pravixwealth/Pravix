@@ -61,3 +61,32 @@ a {
     transform: translateX(100%);
   }
 }
+
+/* Blog callout blocks */
+.callout-info,
+.callout-warning,
+.callout-tip {
+  border-left: 4px solid;
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+
+.callout-info {
+  border-color: #2b5cff;
+  background: #f0f5ff;
+}
+
+.callout-warning {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.callout-tip {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.callout-info::before { content: "ℹ️ "; }
+.callout-warning::before { content: "⚠️ "; }
+.callout-tip::before { content: "💡 "; }

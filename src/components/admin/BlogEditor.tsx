@@ -1,10 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ImageExtension from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import { CalloutBlock } from "@/lib/admin/tiptap-callout";
+import { MediaPicker } from "@/components/admin/MediaPicker";
+import type { MediaFile } from "@/lib/admin/repositories/media.repository";
 import {
   Bold,
   Italic,
@@ -18,6 +22,9 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
   Minus,
+  Info,
+  AlertTriangle,
+  Lightbulb,
 } from "lucide-react";
 
 type BlogEditorProps = {
@@ -26,6 +33,7 @@ type BlogEditorProps = {
 };
 
 export function BlogEditor({ content, onChange }: BlogEditorProps) {
+  const [showImagePicker, setShowImagePicker] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -41,6 +49,7 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
       Placeholder.configure({
         placeholder: "Start writing your blog post...",
       }),
+      CalloutBlock,
     ],
     content: content ?? undefined,
     onUpdate: ({ editor: ed }) => {
@@ -66,10 +75,14 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
   };
 
   const addImage = () => {
-    const url = window.prompt("Image URL");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+    setShowImagePicker(true);
+  };
+
+  const handleImageSelected = (media: MediaFile | null) => {
+    if (media && editor) {
+      editor.chain().focus().setImage({ src: media.publicUrl, alt: media.altText ?? media.originalFilename }).run();
     }
+    setShowImagePicker(false);
   };
 
   return (
@@ -141,6 +154,25 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
           <ImageIcon className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarDivider />
+        <ToolbarButton
+          onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "info" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Key information here..." }] }] }).run()}
+          title="Info Callout"
+        >
+          <Info className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "warning" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Warning: important note here..." }] }] }).run()}
+          title="Warning Callout"
+        >
+          <AlertTriangle className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "tip" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Pro tip here..." }] }] }).run()}
+          title="Tip Callout"
+        >
+          <Lightbulb className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarDivider />
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
           <Undo className="h-4 w-4" />
         </ToolbarButton>
@@ -151,6 +183,15 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
 
       {/* Editor */}
       <EditorContent editor={editor} />
+
+      {/* Inline Image Picker Modal */}
+      {showImagePicker && (
+        <div className="border-t border-[#e2e8f0] bg-[#f8fafc] p-4">
+          <p className="mb-2 text-xs font-medium text-[#64748b]">Insert image from Media Library:</p>
+          <MediaPicker value={null} onChange={handleImageSelected} placeholder="Upload or select an image to insert" />
+          <button type="button" onClick={() => setShowImagePicker(false)} className="mt-2 text-xs text-[#94a3b8] hover:text-red-500">Cancel</button>
+        </div>
+      )}
     </div>
   );
 }
