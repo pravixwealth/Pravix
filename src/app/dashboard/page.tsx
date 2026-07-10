@@ -3729,8 +3729,14 @@ export default function DashboardPage() {
               </DashboardSectionCard>
             )}
 
-            {!isLoading && !error && signedInEmail && profile && (
-              <div className="mt-6 space-y-5 sm:mt-7 sm:space-y-6">
+            {!isLoading && !error && signedInEmail && profile && explanation && (
+              <motion.div
+                className="mt-6 space-y-5 sm:mt-7 sm:space-y-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.05 }}
+                transition={{ duration: 0.5 }}
+              >
                 {/* ── Control Bar ── */}
 
                 {/* ── Section label: Decision Intelligence ── */}
@@ -4465,7 +4471,7 @@ export default function DashboardPage() {
                 {/* ── Divider before advanced section ── */}
 
                 {/* Redundant module mapping removed for clean hierarchy */}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
