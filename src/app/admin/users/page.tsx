@@ -1,9 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
+import Link from "next/link";
 import { requireRole } from "@/lib/admin/server-auth";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { EmptyState } from "@/components/admin/EmptyState";
-import { Users as UsersIcon } from "lucide-react";
+import { Download, Users as UsersIcon } from "lucide-react";
 
 type ProfileRow = {
   id: string;
@@ -70,6 +71,15 @@ export default async function UsersPage() {
       <PageHeader
         title="Users"
         description={`${total} registered user${total !== 1 ? "s" : ""}`}
+        actions={
+          <Link
+            href="/api/admin/users/export"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#e2e8f0] px-4 py-2 text-sm font-medium text-[#475569] hover:bg-[#f8fafc]"
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </Link>
+        }
       />
 
       <div className="mt-8">
