@@ -2034,7 +2034,16 @@ export default function DashboardPage() {
 
             {/* ── My Easy Money Plan Section ── */}
             {!isLoading && !error && signedInEmail && profile && explanation ? (
-              <section className="relative mt-5 overflow-hidden rounded-2xl border border-[#d8e7ff] bg-white shadow-[0_12px_30px_rgba(10,25,48,0.08)] sm:mt-6">
+              <motion.section
+                id="easy-money-plan"
+                className="relative mt-5 overflow-hidden rounded-2xl border border-[#d8e7ff] bg-white shadow-[0_12px_30px_rgba(10,25,48,0.08)] sm:mt-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                onAnimationComplete={() => {
+                  document.getElementById("easy-money-plan")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+              >
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_15%,rgba(43,92,255,0.1),transparent_30%),radial-gradient(circle_at_95%_12%,rgba(0,216,255,0.12),transparent_28%),linear-gradient(180deg,#ffffff_0%,#f6f9ff_100%)]" />
                 <div className="relative p-5 sm:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-3">
@@ -2684,12 +2693,18 @@ export default function DashboardPage() {
                     </motion.div>
                   )}
                 </div>
-              </section>
+              </motion.section>
             ) : null}
 
             {/* AI Chat Assistant - World Class Chat Interface */}
             {!isLoading && !error && signedInEmail && profile && explanation ? (
-              <section className="relative mt-5 overflow-hidden rounded-2xl border border-[#d8e7ff] bg-white shadow-[0_12px_40px_rgba(43,92,255,0.12)] sm:mt-6">
+              <motion.section
+                className="relative mt-5 overflow-hidden rounded-2xl border border-[#d8e7ff] bg-white shadow-[0_12px_40px_rgba(43,92,255,0.12)] sm:mt-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5 }}
+              >
                 {/* Animated gradient background */}
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(124,58,237,0.08),transparent_40%),radial-gradient(circle_at_80%_20%,rgba(43,92,255,0.1),transparent_35%),linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]" />
 
@@ -3045,7 +3060,7 @@ export default function DashboardPage() {
                     )}
                   </div>
                 </div>
-              </section>
+              </motion.section>
             ) : null}
 
             {!isLoading &&
@@ -3054,7 +3069,13 @@ export default function DashboardPage() {
               profile &&
               explanation &&
               allocationArchitecture.length > 0 ? (
-              <section className="relative mt-5 overflow-hidden rounded-[2rem] border border-finance-border bg-white shadow-[0_20px_50px_rgba(10,25,48,0.08)] sm:mt-6">
+              <motion.section
+                className="relative mt-5 overflow-hidden rounded-[2rem] border border-finance-border bg-white shadow-[0_20px_50px_rgba(10,25,48,0.08)] sm:mt-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5 }}
+              >
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_2%_2%,rgba(43,92,255,0.06),transparent_25%),linear-gradient(180deg,#ffffff_0%,#f8faff_100%)]" />
 
                 <div className="relative p-6 sm:p-8">
@@ -3225,7 +3246,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-              </section>
+              </motion.section>
             ) : null}
             {!isLoading &&
               !error &&
@@ -3233,7 +3254,13 @@ export default function DashboardPage() {
               profile &&
               explanation &&
               corpusProjection ? (
-              <section className="relative mt-5 overflow-hidden rounded-[2rem] border border-finance-border bg-white shadow-[0_20px_50px_rgba(10,25,48,0.08)] sm:mt-6">
+              <motion.section
+                className="relative mt-5 overflow-hidden rounded-[2rem] border border-finance-border bg-white shadow-[0_20px_50px_rgba(10,25,48,0.08)] sm:mt-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_90%_10%,rgba(43,92,255,0.06),transparent_40%),linear-gradient(180deg,#ffffff_0%,#f8faff_100%)]" />
 
                 <div className="relative p-6 sm:p-8">
@@ -3543,7 +3570,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-              </section>
+              </motion.section>
             ) : null}
 
             {isLoading || (!error && signedInEmail && profile && !explanation) ? (
