@@ -88,7 +88,7 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-[#e2e8f0] bg-white">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 border-b border-[#e2e8f0] bg-[#f8fafc] px-2 py-1.5">
+      <div className="relative flex flex-wrap items-center gap-0.5 border-b border-[#e2e8f0] bg-[#f8fafc] px-2 py-1.5">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}
@@ -153,6 +153,14 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
         <ToolbarButton onClick={addImage} title="Add Image">
           <ImageIcon className="h-4 w-4" />
         </ToolbarButton>
+        {/* Inline image picker - appears below toolbar when active */}
+        {showImagePicker && (
+          <div className="absolute left-0 right-0 top-full z-10 border-b border-[#e2e8f0] bg-[#f8fafc] p-3">
+            <p className="mb-2 text-xs font-medium text-[#64748b]">Insert image from Media Library:</p>
+            <MediaPicker value={null} onChange={handleImageSelected} placeholder="Upload or select an image" />
+            <button type="button" onClick={() => setShowImagePicker(false)} className="mt-2 text-xs text-[#94a3b8] hover:text-red-500">Cancel</button>
+          </div>
+        )}
         <ToolbarDivider />
         <ToolbarButton
           onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "info" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Key information here..." }] }] }).run()}
@@ -183,15 +191,6 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
 
       {/* Editor */}
       <EditorContent editor={editor} />
-
-      {/* Inline Image Picker Modal */}
-      {showImagePicker && (
-        <div className="border-t border-[#e2e8f0] bg-[#f8fafc] p-4">
-          <p className="mb-2 text-xs font-medium text-[#64748b]">Insert image from Media Library:</p>
-          <MediaPicker value={null} onChange={handleImageSelected} placeholder="Upload or select an image to insert" />
-          <button type="button" onClick={() => setShowImagePicker(false)} className="mt-2 text-xs text-[#94a3b8] hover:text-red-500">Cancel</button>
-        </div>
-      )}
     </div>
   );
 }
