@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Eye, EyeOff, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import type { NavItem } from "@/lib/admin/repositories/navigation.repository";
 
 export function AddNavItemButton({ menuId }: { menuId: string }) {
@@ -18,6 +18,7 @@ export function AddNavItemButton({ menuId }: { menuId: string }) {
     await fetch("/api/admin/navigation", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ menuId, label: label.trim(), href: href.trim(), sortOrder: 99 }),
     });
     setSaving(false);
@@ -50,32 +51,49 @@ export function NavItemActionButtons({ item }: { item: NavItem }) {
   const [editing, setEditing] = useState(false);
   const [label, setLabel] = useState(item.label);
   const [href, setHref] = useState(item.href);
+  const [loading, setLoading] = useState(false);
 
   const toggleVisibility = async () => {
+    setLoading(true);
     await fetch("/api/admin/navigation", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ id: item.id, visible: !item.visible }),
     });
+    setLoading(false);
     router.refresh();
   };
 
   const handleSave = async () => {
     if (!label.trim()) return;
+    setLoading(true);
     await fetch("/api/admin/navigation", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ id: item.id, label: label.trim(), href: href.trim() }),
     });
+    setLoading(false);
     setEditing(false);
     router.refresh();
   };
 
   const handleDelete = async () => {
     if (!confirm(`Delete "${item.label}"?`)) return;
-    await fetch(`/api/admin/navigation?id=${item.id}`, { method: "DELETE" });
+    setLoading(true);
+    await fetch(`/api/admin/navigation?id=${item.id}`, { method: "DELETE", credentials: "include" });
+    setLoading(false);
     router.refresh();
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center gap-1">
+        <Loader2 className="h-3.5 w-3.5 animate-spin text-[#2b5cff]" />
+      </div>
+    );
+  }
 
   if (editing) {
     return (
