@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BarChart3,
+  BookOpen,
   FileText,
   FolderOpen,
   Globe,
@@ -34,6 +35,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard, requiredRole: "viewer" },
       { label: "Users", href: "/admin/users", icon: Users, requiredRole: "admin" },
+      { label: "Admin Guide", href: "/admin/guide", icon: BookOpen, requiredRole: "viewer" },
     ],
   },
   {
