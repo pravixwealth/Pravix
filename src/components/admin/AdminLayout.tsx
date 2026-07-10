@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,11 +8,9 @@ import {
   FolderOpen,
   Globe,
   LayoutDashboard,
-  Menu,
   Settings,
   Shield,
   Users,
-  X,
 } from "lucide-react";
 import type { AdminUser, RoleName } from "@/lib/admin/types";
 import { hasRole } from "@/lib/admin/types";
@@ -79,7 +76,6 @@ type AdminLayoutProps = {
 
 export default function AdminLayoutShell({ user, children }: AdminLayoutProps) {
   const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin";
@@ -90,27 +86,17 @@ export default function AdminLayoutShell({ user, children }: AdminLayoutProps) {
     <div className="flex h-screen overflow-hidden bg-[#f8fafb]">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-[#e8edf3] bg-white transition-transform duration-200 lg:static lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className="fixed inset-y-0 left-0 z-40 w-64 border-r border-[#e8edf3] bg-white lg:static"
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 items-center justify-between border-b border-[#e8edf3] px-5">
+          <div className="flex h-16 items-center border-b border-[#e8edf3] px-5">
             <Link href="/admin" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2b5cff] text-white">
                 <BarChart3 className="h-4 w-4" />
               </div>
               <span className="text-sm font-bold text-[#0f172a]">Pravix Admin</span>
             </Link>
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(false)}
-              className="lg:hidden"
-              aria-label="Close sidebar"
-            >
-              <X className="h-5 w-5 text-[#64748b]" />
-            </button>
           </div>
 
           {/* Navigation */}
@@ -165,27 +151,10 @@ export default function AdminLayoutShell({ user, children }: AdminLayoutProps) {
         </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-16 items-center justify-between border-b border-[#e8edf3] bg-white px-4 lg:px-8">
-          <button
-            type="button"
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden"
-            aria-label="Open sidebar"
-          >
-            <Menu className="h-5 w-5 text-[#475569]" />
-          </button>
-          <div className="flex-1" />
+        <header className="flex h-16 items-center justify-end border-b border-[#e8edf3] bg-white px-4 lg:px-8">
           <Link
             href="/"
             className="text-xs font-medium text-[#64748b] hover:text-[#0f172a]"
