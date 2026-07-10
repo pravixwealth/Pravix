@@ -2034,7 +2034,7 @@ export default function DashboardPage() {
             )}
 
             {/* ── My Easy Money Plan Section ── */}
-            {!isLoading && !error && signedInEmail && profile ? (
+            {!isLoading && !error && signedInEmail && profile && explanation ? (
               <section className="relative mt-5 overflow-hidden rounded-2xl border border-[#d8e7ff] bg-white shadow-[0_12px_30px_rgba(10,25,48,0.08)] sm:mt-6">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_15%,rgba(43,92,255,0.1),transparent_30%),radial-gradient(circle_at_95%_12%,rgba(0,216,255,0.12),transparent_28%),linear-gradient(180deg,#ffffff_0%,#f6f9ff_100%)]" />
                 <div className="relative p-5 sm:p-6">
@@ -2689,7 +2689,7 @@ export default function DashboardPage() {
             ) : null}
 
             {/* AI Chat Assistant - World Class Chat Interface */}
-            {!isLoading && !error && signedInEmail && profile ? (
+            {!isLoading && !error && signedInEmail && profile && explanation ? (
               <section className="relative mt-5 overflow-hidden rounded-2xl border border-[#d8e7ff] bg-white shadow-[0_12px_40px_rgba(43,92,255,0.12)] sm:mt-6">
                 {/* Animated gradient background */}
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(124,58,237,0.08),transparent_40%),radial-gradient(circle_at_80%_20%,rgba(43,92,255,0.1),transparent_35%),linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]" />
@@ -3545,7 +3545,7 @@ export default function DashboardPage() {
               </section>
             ) : null}
 
-            {isLoading && (
+            {isLoading || (!error && signedInEmail && profile && !explanation) ? (
               <DashboardSectionCard
                 className="mt-5 sm:mt-6"
                 eyebrow="Pravix"
@@ -3594,7 +3594,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </DashboardSectionCard>
-            )}
+            ) : null}
 
             {!isLoading && error && (
               <DashboardSectionCard
