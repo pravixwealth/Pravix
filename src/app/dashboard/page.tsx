@@ -3052,6 +3052,7 @@ export default function DashboardPage() {
               !error &&
               signedInEmail &&
               profile &&
+              explanation &&
               allocationArchitecture.length > 0 ? (
               <section className="relative mt-5 overflow-hidden rounded-[2rem] border border-finance-border bg-white shadow-[0_20px_50px_rgba(10,25,48,0.08)] sm:mt-6">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_2%_2%,rgba(43,92,255,0.06),transparent_25%),linear-gradient(180deg,#ffffff_0%,#f8faff_100%)]" />
@@ -3230,6 +3231,7 @@ export default function DashboardPage() {
               !error &&
               signedInEmail &&
               profile &&
+              explanation &&
               corpusProjection ? (
               <section className="relative mt-5 overflow-hidden rounded-[2rem] border border-finance-border bg-white shadow-[0_20px_50px_rgba(10,25,48,0.08)] sm:mt-6">
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_90%_10%,rgba(43,92,255,0.06),transparent_40%),linear-gradient(180deg,#ffffff_0%,#f8faff_100%)]" />
