@@ -190,7 +190,7 @@ export function BlogPostForm({ authors, categories, tags: existingTags, userId }
         return;
       }
 
-      router.push("/admin/blog");
+      router.push("/admin/blog?saved=true");
       router.refresh();
     } catch {
       setError("Network error. Please try again.");

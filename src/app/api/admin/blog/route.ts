@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { getBearerToken, resolveAuthedUser } from "@/lib/agent/server";
 import { resolveAdminUser } from "@/lib/admin/repositories/auth.repository";
 import { createPost, publishPost } from "@/lib/admin/repositories/blog.repository";
+import { trackUsage } from "@/lib/admin/repositories/media.repository";
 import { createAuditLog } from "@/lib/admin/repositories/audit.repository";
 import { hasRole } from "@/lib/admin/types";
 
@@ -132,6 +133,14 @@ export async function POST(request: Request) {
             .upsert({ post_id: post.id, tag_id: tagId }, { onConflict: "post_id,tag_id" });
         }
       }
+    }
+
+    // Track featured image usage
+    if (body.featuredImageId) {
+      await trackUsage(adminClient, body.featuredImageId, "blog_post", post.id, "featured_image");
+    }
+    if (body.ogImageId && body.ogImageId !== body.featuredImageId) {
+      await trackUsage(adminClient, body.ogImageId, "blog_post", post.id, "og_image");
     }
 
     // If publishing, freeze content into published fields
