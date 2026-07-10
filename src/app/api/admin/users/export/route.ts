@@ -79,13 +79,13 @@ export async function GET() {
     const headers = [
       "Full Name", "Email", "Phone", "City", "State", "Occupation", "Employment Type",
       "Monthly Income (₹)", "Monthly SIP (₹)", "Monthly Expenses (₹)", "Current Savings (₹)",
-      "Risk Appetite", "Target Amount (₹)", "Horizon (Years)", "Onboarded", "Joined", "Status"
+      "Risk Appetite", "Target Amount (₹)", "Horizon (Years)", "Onboarded Date", "Joined", "Status"
     ];
 
     const rows = (profiles ?? []).map((p) => [
       p.full_name ?? "",
       p.email ?? "",
-      p.phone_e164 ?? "",
+      p.phone_e164 ? `="${p.phone_e164}"` : "",  // Prevent Excel scientific notation
       p.city ?? "",
       p.state ?? "",
       p.occupation_title ?? "",
@@ -97,8 +97,8 @@ export async function GET() {
       p.risk_appetite ?? "",
       p.target_amount_inr ?? 0,
       p.target_horizon_years ?? 0,
-      p.onboarding_completed_at ? "Yes" : "No",
-      p.created_at ? new Date(p.created_at).toLocaleDateString("en-IN") : "",
+      p.onboarding_completed_at ? new Date(p.onboarding_completed_at).toLocaleDateString("en-IN") : "No",
+      p.created_at ? new Date(p.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "",
       p.status ?? "active",
     ]);
 
