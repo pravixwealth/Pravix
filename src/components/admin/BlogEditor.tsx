@@ -92,14 +92,14 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}
-          title="Bold"
+          title="Bold — Make text stand out. Use for key terms, important numbers, or emphasis."
         >
           <Bold className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
           active={editor.isActive("italic")}
-          title="Italic"
+          title="Italic — Subtle emphasis. Use for book titles, technical terms, or soft highlights."
         >
           <Italic className="h-4 w-4" />
         </ToolbarButton>
@@ -107,14 +107,14 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           active={editor.isActive("heading", { level: 2 })}
-          title="Heading 2"
+          title="Section Heading (H2) — Main sections of your article. Google uses these for SEO and Table of Contents."
         >
           <Heading2 className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           active={editor.isActive("heading", { level: 3 })}
-          title="Heading 3"
+          title="Sub-heading (H3) — Subsections within a main section. Improves readability and scanning."
         >
           <Heading3 className="h-4 w-4" />
         </ToolbarButton>
@@ -122,35 +122,35 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           active={editor.isActive("bulletList")}
-          title="Bullet List"
+          title="Bullet List — Unordered list for features, benefits, or steps without sequence."
         >
           <List className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           active={editor.isActive("orderedList")}
-          title="Numbered List"
+          title="Numbered List — Ordered steps, rankings, or sequential instructions."
         >
           <ListOrdered className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           active={editor.isActive("blockquote")}
-          title="Quote"
+          title="Quote Block — Highlight an expert quote, statistic, or key statement from a source."
         >
           <Quote className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          title="Divider"
+          title="Divider Line — Visual separator between sections. Helps readers know a new topic starts."
         >
           <Minus className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarDivider />
-        <ToolbarButton onClick={addLink} active={editor.isActive("link")} title="Add Link">
+        <ToolbarButton onClick={addLink} active={editor.isActive("link")} title="Insert Link — Add a clickable link to another page or website. Good for internal linking (SEO) and references.">
           <LinkIcon className="h-4 w-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={addImage} title="Add Image">
+        <ToolbarButton onClick={addImage} title="Insert Image — Upload or select an image from the Media Library. Breaks up text and improves engagement.">
           <ImageIcon className="h-4 w-4" />
         </ToolbarButton>
         {/* Inline image picker - appears below toolbar when active */}
@@ -164,27 +164,27 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
         <ToolbarDivider />
         <ToolbarButton
           onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "info" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Key information here..." }] }] }).run()}
-          title="Info Callout"
+          title="ℹ️ Info Box — Highlight key facts, definitions, or important information readers shouldn't miss."
         >
           <Info className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "warning" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Warning: important note here..." }] }] }).run()}
-          title="Warning Callout"
+          title="⚠️ Warning Box — Alert readers about common mistakes, risks, or things to avoid."
         >
           <AlertTriangle className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().insertContent({ type: "callout", attrs: { type: "tip" }, content: [{ type: "paragraph", content: [{ type: "text", text: "Pro tip here..." }] }] }).run()}
-          title="Tip Callout"
+          title="💡 Pro Tip Box — Share expert advice, shortcuts, or insider tips that add extra value."
         >
           <Lightbulb className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarDivider />
-        <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
+        <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo — Reverse your last change. Press Ctrl+Z as a shortcut.">
           <Undo className="h-4 w-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo">
+        <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo — Bring back a change you just undid. Press Ctrl+Y as a shortcut.">
           <Redo className="h-4 w-4" />
         </ToolbarButton>
       </div>
