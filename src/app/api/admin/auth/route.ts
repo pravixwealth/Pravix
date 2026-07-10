@@ -55,12 +55,22 @@ export async function POST(request: Request) {
       .update({ verified: true, verified_at: new Date().toISOString() })
       .eq("id", tokenData.id);
 
-    // Find the user
+    // Find the user (or create if whitelisted but doesn't exist)
     const { data: usersData } = await supabase.auth.admin.listUsers({ perPage: 200 });
-    const user = usersData?.users?.find((u) => u.email === email);
+    let user = usersData?.users?.find((u) => u.email === email);
 
     if (!user) {
-      return NextResponse.json({ error: "Admin user not found" }, { status: 404 });
+      // Auto-create admin user since they're in the whitelist
+      const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+        email,
+        email_confirm: true,
+      });
+
+      if (createError || !newUser?.user) {
+        return NextResponse.json({ error: "Failed to create admin account" }, { status: 500 });
+      }
+
+      user = newUser.user;
     }
 
     // Generate a session directly using admin API
