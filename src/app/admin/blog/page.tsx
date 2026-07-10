@@ -1,12 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { requireRole } from "@/lib/admin/server-auth";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { EmptyState } from "@/components/admin/EmptyState";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { listPosts } from "@/lib/admin/repositories/blog.repository";
 import type { BlogPostStatus } from "@/lib/admin/repositories/blog.repository";
+import { DeletePostButton } from "./DeletePostButton";
 
 const STATUS_TONE: Record<BlogPostStatus, "neutral" | "success" | "warning" | "info" | "danger"> = {
   draft: "neutral",
@@ -26,14 +27,17 @@ export default async function BlogPostsPage() {
     { auth: { persistSession: false } }
   );
 
-  const result = await listPosts(supabase);
+  const result = await listPosts(supabase, { perPage: 100 });
   const posts = result.success ? result.data.posts : [];
+  const total = result.success ? result.data.total : 0;
+  const published = posts.filter((p) => p.status === "published").length;
+  const drafts = posts.filter((p) => p.status === "draft").length;
 
   return (
     <div>
       <PageHeader
         title="Blog"
-        description="Create and manage blog posts."
+        description={`${total} post${total !== 1 ? "s" : ""} · ${published} published · ${drafts} draft${drafts !== 1 ? "s" : ""}`}
         actions={
           <Link
             href="/admin/blog/new"
@@ -65,13 +69,24 @@ export default async function BlogPostsPage() {
               {posts.map((post) => (
                 <div key={post.id} className="flex items-center justify-between px-5 py-4">
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-[#0f172a]">{post.title}</p>
+                    <Link href={`/admin/blog/${post.id}/edit`} className="text-sm font-medium text-[#0f172a] hover:text-[#2b5cff]">
+                      {post.title}
+                    </Link>
                     <p className="mt-0.5 text-xs text-[#94a3b8]">
                       /{post.slug} · {new Date(post.createdAt).toLocaleDateString("en-IN")}
+                      {post.publishedAt && ` · Published ${new Date(post.publishedAt).toLocaleDateString("en-IN")}`}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
                     <StatusBadge label={post.status} tone={STATUS_TONE[post.status]} />
+                    <Link
+                      href={`/admin/blog/${post.id}/edit`}
+                      className="rounded p-1.5 text-[#94a3b8] hover:bg-[#f1f5f9] hover:text-[#0f172a]"
+                      title="Edit"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Link>
+                    <DeletePostButton postId={post.id} postTitle={post.title} />
                   </div>
                 </div>
               ))}
