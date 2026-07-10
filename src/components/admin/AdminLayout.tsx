@@ -87,6 +87,7 @@ export default function AdminLayoutShell({ user, children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside
         className="w-64 shrink-0 border-r border-[#e8edf3] bg-white"
+        suppressHydrationWarning
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
