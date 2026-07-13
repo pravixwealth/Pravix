@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Projection Context & Disclaimers
  * Non-calculational utilities for displaying projection assumptions to users
  * These do NOT modify any financial calculations - they only provide display context

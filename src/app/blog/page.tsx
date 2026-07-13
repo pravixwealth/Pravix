@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import LearnBlogGrid from "@/components/LearnBlogGrid";
 import { getPublishedPosts } from "@/lib/admin/repositories/blog-public.repository";
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
   title: "Learn — Personal Wealth Notes | Pravix",
   description:
     "Real-world financial planning articles from Pravix planners and analysts. Covering goal-based investing, Section 80C, market volatility, and portfolio diversification for Indian households.",
-  alternates: { canonical: "/learn" },
+  alternates: { canonical: "/blog" },
   openGraph: {
     title: "Learn — Personal Wealth Notes | Pravix",
     description: "Real-world financial planning articles covering goal-based investing, tax planning, market volatility, and portfolio diversification for Indian families.",
-    url: absoluteUrl("/learn"),
+    url: absoluteUrl("/blog"),
     type: "website",
   },
 };

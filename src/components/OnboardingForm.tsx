@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
@@ -1283,7 +1283,7 @@ export default function OnboardingForm() {
                 Open My Dashboard
               </Link>
               <Link
-                href="/learn"
+                href="/blog"
                 className="inline-flex h-10 items-center rounded-full border border-white/40 bg-white/10 px-4 text-sm font-semibold text-white hover:bg-white/15"
               >
                 Continue to Learn

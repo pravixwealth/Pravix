@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import { buildOtpEmailHtml, generateOtp, getOtpExpiresAt, isOtpExpired, normalizeEmail } from "./otp";
 
 describe("otp helpers", () => {

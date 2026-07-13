@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import AuthForm from "@/components/AuthForm";
 

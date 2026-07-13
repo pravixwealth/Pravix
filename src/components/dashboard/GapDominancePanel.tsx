@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Target, AlertCircle, TrendingUp, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";

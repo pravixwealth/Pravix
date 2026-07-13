@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { usePublicLayout } from "@/components/PublicLayoutProvider";
@@ -2175,7 +2175,7 @@ export default function HomepageClient({ blogPosts }: HomepageClientProps) {
                 </h2>
               </div>
               <Link
-                href="/learn"
+                href="/blog"
                 className="group inline-flex items-center gap-2 self-start rounded-full border border-[#2b5cff]/20 bg-white px-6 py-3 text-sm font-semibold text-[#2b5cff] shadow-[0_4px_16px_rgba(43,92,255,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(43,92,255,0.16)]"
               >
                 View all articles

@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+﻿import { createClient } from "@supabase/supabase-js";
 import { requireRole } from "@/lib/admin/server-auth";
 import { getSettingsByGroup } from "@/lib/admin/repositories/settings.repository";
 import { SettingsGroupPage } from "./SettingsGroupPage";

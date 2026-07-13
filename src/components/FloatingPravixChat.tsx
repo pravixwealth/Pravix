@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CalendarDays, Lock, MessageCircle, PhoneCall, Send, Sparkles, X } from "lucide-react";

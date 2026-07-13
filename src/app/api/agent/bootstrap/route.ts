@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createAuthedSupabaseClient, getBearerToken, resolveAuthedUser } from "@/lib/agent/server";
 import { getAgentReadiness, loadAgentContext } from "@/lib/agent/context";
 import { generateFinancialSnapshot } from "@/lib/agent/financial-engine";

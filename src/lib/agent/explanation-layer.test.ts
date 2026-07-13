@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+﻿import { afterEach, describe, expect, it, vi } from "vitest";
 import { generateExplanation } from "./explanation-layer";
 import type { FinancialSnapshot } from "./types";
 

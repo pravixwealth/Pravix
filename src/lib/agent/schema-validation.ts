@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SCHEMA VALIDATION
  * 
  * Validates that DB profiles contain required fields for financial engine.

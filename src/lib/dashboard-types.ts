@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Dashboard-specific types.
  *
  * These types describe the shape of data consumed by the dashboard UI layer.

@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import dynamic from "next/dynamic";
 import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";

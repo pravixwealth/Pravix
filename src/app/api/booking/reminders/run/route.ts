@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { runDueBookingReminders } from "@/lib/booking/server";
 import { BookingValidationError, parsePositiveInteger } from "@/lib/booking/validation";
 

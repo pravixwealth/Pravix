@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { generateFollowUpAnswer } from "@/lib/agent/explanation-layer";
 
 export const runtime = "nodejs";

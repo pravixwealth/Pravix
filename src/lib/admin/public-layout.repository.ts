@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+﻿import { createClient } from "@supabase/supabase-js";
 import { getMenuItems } from "./repositories/navigation.repository";
 import type { NavItem } from "./repositories/navigation.repository";
 

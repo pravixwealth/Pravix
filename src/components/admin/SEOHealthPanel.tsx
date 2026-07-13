@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { CheckCircle2, XCircle } from "lucide-react";
 import type { SEOScoreResult } from "@/lib/admin/content-utils";

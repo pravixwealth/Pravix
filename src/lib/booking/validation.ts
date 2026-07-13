@@ -1,4 +1,4 @@
-export class BookingValidationError extends Error {
+﻿export class BookingValidationError extends Error {
   readonly status: number;
 
   constructor(message: string, status = 400) {

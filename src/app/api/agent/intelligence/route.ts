@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { loadAgentContext } from "@/lib/agent/context";
 import { buildDashboardIntelligence } from "@/lib/agent/intelligence";
 import { generateFinancialSnapshot } from "@/lib/agent/financial-engine";

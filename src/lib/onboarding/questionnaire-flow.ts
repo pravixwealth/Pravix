@@ -1,4 +1,4 @@
-export type OnboardingFieldType =
+﻿export type OnboardingFieldType =
   | "text"
   | "email"
   | "phone"

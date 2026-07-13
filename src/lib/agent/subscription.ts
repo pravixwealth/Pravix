@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+﻿import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type SubscriptionPlan = "free" | "starter" | "pro";
 export type SubscriptionStatus = "trialing" | "active" | "past_due" | "canceled" | "paused";

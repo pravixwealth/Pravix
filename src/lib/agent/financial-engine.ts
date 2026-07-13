@@ -1,4 +1,4 @@
-// FINANCIAL ENGINE CONTRACT
+﻿// FINANCIAL ENGINE CONTRACT
 // This is the ONLY place where financial calculations are allowed.
 // Do NOT:
 // - modify user input

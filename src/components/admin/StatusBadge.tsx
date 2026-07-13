@@ -1,4 +1,4 @@
-type StatusBadgeTone = "neutral" | "success" | "warning" | "danger" | "info";
+﻿type StatusBadgeTone = "neutral" | "success" | "warning" | "danger" | "info";
 
 type StatusBadgeProps = {
   label: string;

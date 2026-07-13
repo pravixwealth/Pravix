@@ -1,4 +1,4 @@
-import { Resend } from "resend";
+﻿import { Resend } from "resend";
 import { parseExtraRecipientsFromEnv } from "./recipients";
 
 function getStringField(record: Record<string, unknown>, keys: string[]): string | null {

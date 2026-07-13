@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { absoluteUrl, defaultOgImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Learn",
   description: "Personal finance, tax, and investing articles from Pravix experts for Indian households.",
   alternates: {
-    canonical: "/learn",
+    canonical: "/blog",
   },
   openGraph: {
     title: "Pravix Learn | Personal Wealth Notes",
     description: "Personal finance, tax, and investing articles from Pravix experts for Indian households.",
-    url: absoluteUrl("/learn"),
+    url: absoluteUrl("/blog"),
     type: "website",
     images: [defaultOgImage],
   },

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import OnboardingForm from "@/components/OnboardingForm";
 import SiteHeader from "@/components/SiteHeader";
 import { ShieldCheck, Sparkles, TimerReset } from "lucide-react";

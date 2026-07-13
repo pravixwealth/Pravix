@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Core admin platform types.
  * These types are shared across all admin modules.
  */

@@ -1,4 +1,4 @@
-import type { AgentChatHistoryItem, AgentContext, AgentStructuredAdvice, FinancialSnapshot, AIExplanationOutput, DashboardAISummary } from "@/lib/agent/types";
+﻿import type { AgentChatHistoryItem, AgentContext, AgentStructuredAdvice, FinancialSnapshot, AIExplanationOutput, DashboardAISummary } from "@/lib/agent/types";
 import { generateFinancialSnapshot } from "./financial-engine";
 import { normalizeBands } from "./band-resolver";
 

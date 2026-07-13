@@ -1,4 +1,4 @@
-export function parseExtraRecipientsFromEnv(): string[] {
+﻿export function parseExtraRecipientsFromEnv(): string[] {
   const raw = process.env.BOOKING_NOTIFICATION_EXTRA_RECIPIENTS ?? "";
   if (!raw || raw.trim().length === 0) return [];
 

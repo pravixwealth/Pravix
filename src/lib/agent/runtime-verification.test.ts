@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import { generateExplanation } from "./explanation-layer";
 import type { FinancialSnapshot } from "./types";
 

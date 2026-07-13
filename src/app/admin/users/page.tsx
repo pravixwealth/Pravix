@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+﻿import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { requireRole } from "@/lib/admin/server-auth";
 import { PageHeader } from "@/components/admin/PageHeader";

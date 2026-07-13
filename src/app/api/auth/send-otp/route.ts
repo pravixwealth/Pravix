@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import {

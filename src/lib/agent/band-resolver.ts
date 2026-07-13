@@ -1,4 +1,4 @@
-/**
+﻿/**
  * BAND RESOLVER
  * Converts onboarding band strings to actual numeric values
  * This ensures Financial Engine gets real numbers, not categories

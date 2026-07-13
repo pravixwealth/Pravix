@@ -1,4 +1,4 @@
-import { it, describe, expect } from "vitest";
+﻿import { it, describe, expect } from "vitest";
 import type { AgentContext, AgentProfileSnapshot } from "./types";
 import { normalizeBands } from "./band-resolver";
 import { generateFinancialSnapshot } from "./financial-engine";

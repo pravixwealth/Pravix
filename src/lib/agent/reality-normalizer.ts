@@ -1,4 +1,4 @@
-/**
+﻿/**
  * REALITY NORMALIZER
  *
  * Pure deterministic layer between context loading and the financial engine.

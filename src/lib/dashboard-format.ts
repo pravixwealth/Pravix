@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Dashboard formatting utilities.
  *
  * Pure display functions — zero business logic, zero side effects.

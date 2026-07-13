@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/admin/server-auth";
+﻿import { requireAdmin } from "@/lib/admin/server-auth";
 
 export default async function AdminGuidePage() {
   await requireAdmin();

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Google SERP preview — shows how the post will appear in search results.
  * Reusable by Blog, Pages, or any future CMS content.
  */

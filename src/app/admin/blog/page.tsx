@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+﻿import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { requireRole } from "@/lib/admin/server-auth";

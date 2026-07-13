@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+﻿import { describe, it, expect } from "vitest";
 import { normalizeBands } from "./band-resolver";
 import { normalizePlanInput } from "./reality-normalizer";
 import type { AgentContext } from "./types";

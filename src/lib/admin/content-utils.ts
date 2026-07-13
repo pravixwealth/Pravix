@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Content utilities for Blog CMS.
  * Pure functions — no side effects, no server dependencies.
  * Used in both admin UI (real-time) and server (on publish).

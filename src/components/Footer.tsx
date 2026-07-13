@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight, BookOpen, CalendarDays, Compass, Mail, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { FaInstagram, FaLinkedin, FaYoutube, FaFacebook } from "react-icons/fa";
 import type { PublicLayoutData } from "@/lib/admin/public-layout.repository";

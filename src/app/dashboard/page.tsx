@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 // UI CONTRACT
 // This layer must NOT perform any financial calculations.

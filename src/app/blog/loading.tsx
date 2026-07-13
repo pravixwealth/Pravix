@@ -1,4 +1,4 @@
-export default function LearnLoading() {
+﻿export default function LearnLoading() {
   return (
     <div className="min-h-screen bg-finance-bg pt-24 pb-16">
       <div className="mx-auto max-w-6xl px-6">

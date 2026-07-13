@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {

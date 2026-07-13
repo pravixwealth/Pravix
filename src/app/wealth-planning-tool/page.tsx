@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BarChart3, ShieldCheck, Sparkles, Target, TrendingUp } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";

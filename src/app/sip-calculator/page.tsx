@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Calculator, TrendingUp, ShieldCheck, Target } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
@@ -103,7 +103,7 @@ export default function SipCalculatorPage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/learn"
+              href="/blog"
               className="inline-flex h-12 items-center gap-2 rounded-full border border-[#d8e7ff] bg-white px-7 text-sm font-semibold text-[#0a1930] transition-colors hover:bg-[#f5f8ff]"
             >
               Learn About SIP Investing

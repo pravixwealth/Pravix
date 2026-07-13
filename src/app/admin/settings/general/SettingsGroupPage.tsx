@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { SettingsForm } from "@/components/admin/SettingsForm";
 import type { SettingEntry } from "@/lib/admin/repositories/settings.repository";

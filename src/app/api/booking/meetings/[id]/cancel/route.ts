@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/agent/server";
 import { cancelBookingReminderEmail, getBookingReminderEmailId } from "@/lib/booking/notifications";
 import { BookingValidationError, isRecord, parseEmail, parseOptionalString } from "@/lib/booking/validation";

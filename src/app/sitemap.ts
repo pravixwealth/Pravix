@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/seo";
 import { getPublishedPosts } from "@/lib/admin/repositories/blog-public.repository";
 
@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/services"), lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: absoluteUrl("/learn"), lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: absoluteUrl("/blog"), lastModified: now, changeFrequency: "weekly", priority: 0.85 },
     { url: absoluteUrl("/about"), lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: absoluteUrl("/sip-calculator"), lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     { url: absoluteUrl("/financial-planning-india"), lastModified: now, changeFrequency: "monthly", priority: 0.85 },

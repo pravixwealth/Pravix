@@ -1,4 +1,4 @@
-import Script from "next/script";
+﻿import Script from "next/script";
 import { config } from "@/lib/admin/configuration.service";
 
 export default async function GoogleAnalytics() {

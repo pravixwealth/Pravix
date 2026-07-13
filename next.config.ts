@@ -40,6 +40,16 @@ const nextConfig: NextConfig = {
         destination: "/image/aditya-saini-profile-2026.jpg",
         permanent: true,
       },
+      {
+        source: "/learn",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/learn/:slug*",
+        destination: "/blog/:slug*",
+        permanent: true,
+      },
     ];
   },
   async headers() {

@@ -13,7 +13,7 @@ import {
 } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: `Pravix — ${siteTagline}`,
+  title: `Pravix � ${siteTagline}`,
   description: siteDescription,
   keywords: defaultSeoKeywords,
   alternates: {
@@ -24,20 +24,20 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: absoluteUrl("/"),
     siteName,
-    title: `Pravix — ${siteTagline}`,
+    title: `Pravix � ${siteTagline}`,
     description: siteDescription,
     images: [
       {
         url: defaultOgImage,
         width: 1200,
         height: 630,
-        alt: `Pravix — ${siteTagline}`,
+        alt: `Pravix � ${siteTagline}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `Pravix — ${siteTagline}`,
+    title: `Pravix � ${siteTagline}`,
     description: siteDescription,
     images: [defaultOgImage],
   },
@@ -76,15 +76,15 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* WebPage schema — page-specific structured data */}
+      {/* WebPage schema � page-specific structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd()) }}
       />
 
-      {/* SSR hero — visible to Googlebot without JS */}
+      {/* SSR hero � visible to Googlebot without JS */}
       <div className="sr-only">
-        <h1>Pravix — Wealth Management Platform India</h1>
+        <h1>Pravix � Wealth Management Platform India</h1>
         <p>
           Pravix is India&apos;s goal-based AI wealth planning platform. We help Indian families
           plan, track, and optimize long-term wealth goals using disciplined systems, real market
@@ -93,7 +93,7 @@ export default async function HomePage() {
         </p>
         <nav>
           <a href="/services">Wealth Management Services</a>
-          <a href="/learn">Financial Planning Guides</a>
+          <a href="/blog">Financial Planning Guides</a>
           <a href="/about">About Pravix</a>
           <a href="/onboarding">Get Started</a>
           <a href="/#book-discovery-call">Book a Discovery Call</a>
