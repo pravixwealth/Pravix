@@ -49,6 +49,9 @@ export function BlogPostForm({ authors, categories, tags: existingTags, userId }
   const [excerpt, setExcerpt] = useState("");
   const [authorId, setAuthorId] = useState(authors[0]?.id ?? "");
   const [categoryId, setCategoryId] = useState("");
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [creatingCategory, setCreatingCategory] = useState(false);
+  const [allCategories, setAllCategories] = useState(categories);
   const [contentJson, setContentJson] = useState<Record<string, unknown> | null>(null);
   const [contentHtml, setContentHtml] = useState("");
 
@@ -147,6 +150,28 @@ export function BlogPostForm({ authors, categories, tags: existingTags, userId }
 
   const seoScore = useMemo(() => calculateSEOScore(seoInput), [seoInput]);
 
+  // ── Create Category ──────────────────────────────────────────────────────
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    setCreatingCategory(true);
+    const slug = newCategoryName.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+    const response = await fetch("/api/admin/blog/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ name: newCategoryName.trim(), slug }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.category) {
+        setAllCategories([...allCategories, data.category]);
+        setCategoryId(data.category.id);
+      }
+    }
+    setNewCategoryName("");
+    setCreatingCategory(false);
+  };
+
   // ── Save / Publish / Schedule ──────────────────────────────────────────────
   const handleSave = useCallback(async (action: "draft" | "publish" | "schedule") => {
     if (!title.trim()) { setError("Title is required"); return; }
@@ -240,8 +265,12 @@ export function BlogPostForm({ authors, categories, tags: existingTags, userId }
             <label htmlFor="category" className="block text-sm font-medium text-[#0f172a]">Category</label>
             <select id="category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm text-[#0f172a] focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20">
               <option value="">No category</option>
-              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              {allCategories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
+            <div className="mt-1.5 flex items-center gap-2">
+              <input value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreateCategory(); } }} placeholder="New category name" className="flex-1 rounded border border-[#e2e8f0] px-2 py-1 text-xs text-[#0f172a] placeholder:text-[#94a3b8] focus:border-[#2b5cff] focus:outline-none" />
+              <button type="button" onClick={handleCreateCategory} disabled={creatingCategory || !newCategoryName.trim()} className="rounded bg-[#2b5cff] px-2.5 py-1 text-[11px] font-medium text-white disabled:opacity-50">+ New</button>
+            </div>
           </div>
         </div>
 
