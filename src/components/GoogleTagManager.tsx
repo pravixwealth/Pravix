@@ -1,8 +1,8 @@
-import Script from "next/script";
+﻿import Script from "next/script";
 import { config } from "@/lib/admin/configuration.service";
 
 /**
- * Google Tag Manager — loads GTM on every page.
+ * Google Tag Manager â€” loads GTM on every page.
  * Reads GTM ID from admin settings, falls back to hardcoded ID.
  */
 export async function GoogleTagManagerHead() {
@@ -15,7 +15,7 @@ export async function GoogleTagManagerHead() {
   }
 
   if (!gtmId) {
-    gtmId = "GTM-T7RDK8HF";
+    gtmId = "GTM-T36XQM8W";
   }
 
   if (!gtmId) return null;
@@ -41,7 +41,7 @@ export async function GoogleTagManagerBody() {
   }
 
   if (!gtmId) {
-    gtmId = "GTM-T7RDK8HF";
+    gtmId = "GTM-T36XQM8W";
   }
 
   if (!gtmId) return null;
