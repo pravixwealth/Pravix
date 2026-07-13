@@ -88,6 +88,13 @@ export async function POST(request: Request) {
     if (!body.slug?.trim()) {
       return NextResponse.json({ error: "Slug is required" }, { status: 400 });
     }
+
+    // Check reserved slugs (these are existing site routes)
+    const RESERVED_SLUGS = ["services", "about", "dashboard", "onboarding", "login", "sign-in", "create-account", "profile", "blog", "admin", "admin-login", "api", "sip-calculator", "financial-planning-india", "wealth-planning-tool", "investment-calculator"];
+    if (RESERVED_SLUGS.includes(body.slug.trim())) {
+      return NextResponse.json({ error: `The slug "${body.slug}" is reserved. Choose a different URL.` }, { status: 400 });
+    }
+
     if (!body.authorId) {
       return NextResponse.json({ error: "Author is required" }, { status: 400 });
     }

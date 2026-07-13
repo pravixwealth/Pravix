@@ -144,7 +144,7 @@ export default function LearnBlogGrid({ posts }: LearnBlogGridProps) {
                 ))}
               </div>
               <Link
-                href={`/learn/${post.slug}`}
+                href={`/${post.slug}`}
                 className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-finance-accent"
               >
                 Read article
