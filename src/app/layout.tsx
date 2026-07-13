@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { GoogleTagManagerHead, GoogleTagManagerBody } from "@/components/GoogleTagManager";
 import {
   absoluteUrl,
   defaultOgImage,
@@ -113,6 +114,7 @@ export default async function RootLayout({
         className={`${jakartaSans.variable} ${geistMono.variable} antialiased bg-finance-bg text-finance-text min-h-screen flex flex-col font-sans`}
       >
         <PublicLayoutProvider data={layoutData}>
+          <GoogleTagManagerHead />
           <GoogleAnalytics />
           <script
             type="application/ld+json"
@@ -126,6 +128,7 @@ export default async function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd()) }}
           />
+          <GoogleTagManagerBody />
           <main className="flex-grow flex flex-col">{children}</main>
           <div id="public-chrome">
             <GlobalFloatingPravixChat />
