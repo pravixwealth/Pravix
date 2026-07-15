@@ -42,3 +42,7 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# Scripts with credentials (one-time setup, already executed)
+scripts/*.mjs
+scripts/*.sql
