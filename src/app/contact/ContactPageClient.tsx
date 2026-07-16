@@ -171,19 +171,6 @@ export default function ContactPageClient() {
                 <div className="flex items-center gap-4 rounded-2xl border border-[#e8edf3] bg-[#f8fafc] p-5">
                   <div
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white"
-                    style={{ background: "linear-gradient(135deg, #f59e0b, #ea580c)", boxShadow: "0 4px 14px rgba(245,158,11,0.3)" }}
-                  >
-                    <Clock className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#94a3b8]">Office Hours</p>
-                    <p className="mt-0.5 text-base font-semibold text-[#0f172a]">Mon – Sat, 10:00 AM – 7:00 PM IST</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 rounded-2xl border border-[#e8edf3] bg-[#f8fafc] p-5">
-                  <div
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white"
                     style={{ background: "linear-gradient(135deg, #475569, #1e293b)", boxShadow: "0 4px 14px rgba(71,85,105,0.3)" }}
                   >
                     <MapPin className="h-5 w-5" />
