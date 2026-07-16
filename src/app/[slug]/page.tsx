@@ -13,7 +13,7 @@ const RESERVED_SLUGS = [
   "services", "about", "dashboard", "onboarding", "login", "sign-in",
   "create-account", "profile", "blog", "admin", "admin-login", "api",
   "sip-calculator", "financial-planning-india", "wealth-planning-tool",
-  "investment-calculator",
+  "investment-calculator", "contact-us",
 ];
 
 type BlogSlugPageProps = {
