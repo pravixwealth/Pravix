@@ -69,6 +69,7 @@ export function EditPostForm({ post, currentTags, authors, categories }: EditPos
       const response = await fetch(`/api/admin/blog/${post.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(body),
       });
 

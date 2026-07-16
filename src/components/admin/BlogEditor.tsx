@@ -10,6 +10,7 @@ import Underline from "@tiptap/extension-underline";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import TextAlign from "@tiptap/extension-text-align";
+import { FontSize } from "@/lib/admin/tiptap-font-size";
 import { CalloutBlock } from "@/lib/admin/tiptap-callout";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import type { MediaFile } from "@/lib/admin/repositories/media.repository";
@@ -63,6 +64,7 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
       Underline,
       TextStyle,
       Color,
+      FontSize,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       CalloutBlock,
     ],
@@ -145,7 +147,7 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
           onClick={() => {
             const sizes: Record<string, string> = { small: "14px", normal: "16px", large: "20px", xlarge: "24px" };
             const size = window.prompt("Size: small, normal, large, xlarge");
-            if (size && sizes[size]) editor.chain().focus().setMark("textStyle", { fontSize: sizes[size] }).run();
+            if (size && sizes[size]) editor.chain().focus().setFontSize(sizes[size]).run();
           }}
           title="Font Size — Change text size (small/normal/large/xlarge)."
         >
