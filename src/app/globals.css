@@ -90,3 +90,16 @@ a {
 .callout-info::before { content: "ℹ️ "; }
 .callout-warning::before { content: "⚠️ "; }
 .callout-tip::before { content: "💡 "; }
+
+/* Blog content spacing — preserve paragraph breaks from editor */
+.prose p:empty {
+  min-height: 1.5em;
+}
+
+.prose p + p {
+  margin-top: 1em;
+}
+
+/* Preserve Tiptap text alignment */
+.prose [style*="text-align: center"] { text-align: center; }
+.prose [style*="text-align: right"] { text-align: right; }

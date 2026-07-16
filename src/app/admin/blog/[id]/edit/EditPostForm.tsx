@@ -26,6 +26,11 @@ export function EditPostForm({ post, currentTags, authors, categories }: EditPos
   const [contentJson, setContentJson] = useState<Record<string, unknown> | null>(post.contentJson);
   const [contentHtml, setContentHtml] = useState("");
   const [status, setStatus] = useState(post.status);
+  const [seoTitle, setSeoTitle] = useState(post.seoTitle ?? "");
+  const [seoDescription, setSeoDescription] = useState(post.seoDescription ?? "");
+  const [focusKeyword, setFocusKeyword] = useState(post.focusKeyword ?? "");
+  const [canonicalUrl, setCanonicalUrl] = useState(post.canonicalUrl ?? "");
+  const [robots, setRobots] = useState(post.robots ?? "index,follow");
 
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -47,6 +52,11 @@ export function EditPostForm({ post, currentTags, authors, categories }: EditPos
         authorId,
         categoryId: categoryId || null,
         contentJson,
+        seoTitle: seoTitle.trim() || null,
+        seoDescription: seoDescription.trim() || null,
+        focusKeyword: focusKeyword.trim() || null,
+        canonicalUrl: canonicalUrl.trim() || null,
+        robots,
       };
 
       if (action === "publish") {
@@ -142,6 +152,42 @@ export function EditPostForm({ post, currentTags, authors, categories }: EditPos
         <label className="block text-sm font-medium text-[#0f172a] mb-1.5">Content</label>
         <BlogEditor content={contentJson} onChange={(json, html) => { setContentJson(json); setContentHtml(html); }} />
       </div>
+
+      {/* SEO Fields */}
+      <details className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-4" open>
+        <summary className="cursor-pointer text-sm font-semibold text-[#0f172a]">SEO Settings</summary>
+        <div className="mt-4 space-y-3">
+          <div>
+            <label className="text-xs font-medium text-[#64748b]">Focus Keyword</label>
+            <input type="text" value={focusKeyword} onChange={(e) => setFocusKeyword(e.target.value)} placeholder="e.g. goal based investing" className="mt-1 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20" />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-[#64748b]">Meta Title</label>
+            <input type="text" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder={title} className="mt-1 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20" />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-[#64748b]">Meta Description</label>
+            <textarea value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} rows={2} placeholder={excerpt} className="mt-1 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20" />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-[#64748b]">Canonical URL</label>
+              <div className="mt-1 flex gap-2">
+                <input type="url" value={canonicalUrl} onChange={(e) => setCanonicalUrl(e.target.value)} placeholder="https://pravix.in/..." className="flex-1 rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20" />
+                <button type="button" onClick={() => setCanonicalUrl(`https://pravix.in/${slug}`)} className="shrink-0 rounded border border-[#e2e8f0] px-2 py-1 text-[10px] text-[#64748b] hover:bg-[#f1f5f9]">Use slug</button>
+              </div>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-[#64748b]">Robots</label>
+              <select value={robots} onChange={(e) => setRobots(e.target.value)} className="mt-1 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20">
+                <option value="index,follow">Index, Follow</option>
+                <option value="noindex,follow">NoIndex, Follow</option>
+                <option value="noindex,nofollow">NoIndex, NoFollow</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
 
       {error && <div className="rounded-lg bg-red-50 px-4 py-2.5 text-sm text-red-700">{error}</div>}
       {success && <div className="rounded-lg bg-emerald-50 px-4 py-2.5 text-sm text-emerald-700">{success}</div>}

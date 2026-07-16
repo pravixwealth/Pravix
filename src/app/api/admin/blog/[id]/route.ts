@@ -116,6 +116,9 @@ export async function PATCH(
   if (body.categoryId !== undefined) updateParams.categoryId = body.categoryId;
   if (body.seoTitle !== undefined) updateParams.seoTitle = body.seoTitle;
   if (body.seoDescription !== undefined) updateParams.seoDescription = body.seoDescription;
+  if (body.focusKeyword !== undefined) updateParams.focusKeyword = body.focusKeyword;
+  if (body.canonicalUrl !== undefined) updateParams.canonicalUrl = body.canonicalUrl;
+  if (body.robots !== undefined) updateParams.robots = body.robots;
   if (body.featuredImageId !== undefined) updateParams.featuredImageId = body.featuredImageId;
   if (body.ogImageId !== undefined) updateParams.ogImageId = body.ogImageId;
   if (body.status !== undefined) updateParams.status = body.status;

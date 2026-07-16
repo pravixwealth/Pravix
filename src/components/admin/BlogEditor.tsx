@@ -6,10 +6,17 @@ import StarterKit from "@tiptap/starter-kit";
 import ImageExtension from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import TextAlign from "@tiptap/extension-text-align";
 import { CalloutBlock } from "@/lib/admin/tiptap-callout";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import type { MediaFile } from "@/lib/admin/repositories/media.repository";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
   Italic,
   List,
@@ -25,6 +32,10 @@ import {
   Info,
   AlertTriangle,
   Lightbulb,
+  Underline as UnderlineIcon,
+  Strikethrough,
+  Palette,
+  Type,
 } from "lucide-react";
 
 type BlogEditorProps = {
@@ -49,6 +60,10 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
       Placeholder.configure({
         placeholder: "Start writing your blog post...",
       }),
+      Underline,
+      TextStyle,
+      Color,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       CalloutBlock,
     ],
     content: content ?? undefined,
@@ -102,6 +117,61 @@ export function BlogEditor({ content, onChange }: BlogEditorProps) {
           title="Italic — Subtle emphasis. Use for book titles, technical terms, or soft highlights."
         >
           <Italic className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          active={editor.isActive("underline")}
+          title="Underline — Emphasize important text. Use sparingly."
+        >
+          <UnderlineIcon className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          active={editor.isActive("strike")}
+          title="Strikethrough — Show removed or outdated information."
+        >
+          <Strikethrough className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => {
+            const color = window.prompt("Enter color (e.g. #ff0000, red, blue):");
+            if (color) editor.chain().focus().setColor(color).run();
+          }}
+          title="Text Color — Change text color. Enter hex (#ff0000) or name (red, blue)."
+        >
+          <Palette className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => {
+            const sizes: Record<string, string> = { small: "14px", normal: "16px", large: "20px", xlarge: "24px" };
+            const size = window.prompt("Size: small, normal, large, xlarge");
+            if (size && sizes[size]) editor.chain().focus().setMark("textStyle", { fontSize: sizes[size] }).run();
+          }}
+          title="Font Size — Change text size (small/normal/large/xlarge)."
+        >
+          <Type className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarDivider />
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          active={editor.isActive({ textAlign: "left" })}
+          title="Align Left"
+        >
+          <AlignLeft className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          active={editor.isActive({ textAlign: "center" })}
+          title="Align Center"
+        >
+          <AlignCenter className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          active={editor.isActive({ textAlign: "right" })}
+          title="Align Right"
+        >
+          <AlignRight className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarDivider />
         <ToolbarButton

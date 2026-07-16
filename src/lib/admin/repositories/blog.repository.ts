@@ -24,6 +24,9 @@ export type BlogPost = {
   seoTitle: string | null;
   seoDescription: string | null;
   ogImageId: string | null;
+  focusKeyword: string | null;
+  canonicalUrl: string | null;
+  robots: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -128,6 +131,9 @@ function rowToPost(row: Record<string, unknown>): BlogPost {
     seoTitle: (row.seo_title as string) ?? null,
     seoDescription: (row.seo_description as string) ?? null,
     ogImageId: (row.og_image_id as string) ?? null,
+    focusKeyword: (row.focus_keyword as string) ?? null,
+    canonicalUrl: (row.canonical_url as string) ?? null,
+    robots: (row.robots as string) ?? "index,follow",
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
   };
@@ -259,6 +265,9 @@ export async function updatePost(
   if (params.categoryId !== undefined) updates.category_id = params.categoryId;
   if (params.seoTitle !== undefined) updates.seo_title = params.seoTitle;
   if (params.seoDescription !== undefined) updates.seo_description = params.seoDescription;
+  if (params.focusKeyword !== undefined) updates.focus_keyword = params.focusKeyword;
+  if (params.canonicalUrl !== undefined) updates.canonical_url = params.canonicalUrl;
+  if (params.robots !== undefined) updates.robots = params.robots;
   if (params.ogImageId !== undefined) updates.og_image_id = params.ogImageId;
 
   const { data, error } = await supabase

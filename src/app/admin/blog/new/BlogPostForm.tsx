@@ -347,7 +347,10 @@ export function BlogPostForm({ authors, categories, tags: existingTags, userId }
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="canonical" className="text-xs font-medium text-[#64748b]">Canonical URL</label>
-              <input id="canonical" type="url" value={canonicalUrl} onChange={(e) => setCanonicalUrl(e.target.value)} placeholder="https://pravix.in/learn/..." className="mt-1 w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20" />
+              <div className="mt-1 flex gap-2">
+                <input id="canonical" type="url" value={canonicalUrl} onChange={(e) => setCanonicalUrl(e.target.value)} placeholder="https://pravix.in/..." className="flex-1 rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm focus:border-[#2b5cff] focus:outline-none focus:ring-2 focus:ring-[#2b5cff]/20" />
+                <button type="button" onClick={() => setCanonicalUrl(`https://pravix.in/${slug}`)} className="shrink-0 rounded-lg border border-[#e2e8f0] px-2 py-1 text-[10px] font-medium text-[#64748b] hover:bg-[#f8fafc]">Use slug</button>
+              </div>
             </div>
             <div>
               <label htmlFor="robots" className="text-xs font-medium text-[#64748b]">Robots</label>
