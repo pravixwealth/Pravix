@@ -85,6 +85,10 @@ export function organizationJsonLd() {
     },
     address: {
       "@type": "PostalAddress",
+      streetAddress: "BSI Business Park C51 Office 105",
+      addressLocality: "Noida",
+      addressRegion: "Uttar Pradesh",
+      postalCode: "201301",
       addressCountry: "IN",
     },
     telephone: "+918796215599",

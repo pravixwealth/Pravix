@@ -79,7 +79,7 @@ const FALLBACK: PublicLayoutData = {
     phone: "+918796215599",
     email: "info@pravix.in",
     whatsapp: "+918796215599",
-    address: null,
+    address: "BSI Business Park C51 Office 105, Noida 62, Uttar Pradesh 201301",
   },
   social: {
     instagram: "https://www.instagram.com/pravixwealth/",

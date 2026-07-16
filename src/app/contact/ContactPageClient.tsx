@@ -177,8 +177,8 @@ export default function ContactPageClient() {
                   </div>
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#94a3b8]">Registered Office</p>
-                    <p className="mt-0.5 text-base font-semibold text-[#0f172a]">Pravix Wealth Management</p>
-                    <p className="text-sm text-[#64748b]">India</p>
+                    <p className="mt-0.5 text-base font-semibold text-[#0f172a]">BSI Business Park C51 Office 105</p>
+                    <p className="text-sm text-[#64748b]">Noida 62, Uttar Pradesh 201301</p>
                   </div>
                 </div>
               </div>

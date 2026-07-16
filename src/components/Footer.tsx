@@ -51,6 +51,9 @@ export default function Footer({ layoutData }: FooterProps) {
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#c5d1e8]">
                 {footer.about}
               </p>
+              <p className="mt-4 text-xs leading-relaxed text-[#8aa2ca]">
+                <span className="font-semibold text-[#c5d1e8]">Office:</span> BSI Business Park C51 Office 105, Noida 62, Uttar Pradesh 201301
+              </p>
             </div>
 
             <div>
