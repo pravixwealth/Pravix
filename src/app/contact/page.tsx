@@ -7,17 +7,17 @@ export const metadata: Metadata = {
   description:
     "Get in touch with Pravix Wealth Management. Book a free discovery call or send us an inquiry about financial planning, investment advisory, and wealth management.",
   alternates: {
-    canonical: "/contact-us",
+    canonical: "/contact",
   },
   openGraph: {
     title: "Contact Us | Pravix",
     description:
       "Connect with certified wealth architects at Pravix. Book a free call or send an inquiry for personalized financial planning.",
-    url: "/contact-us",
+    url: "/contact",
   },
 };
 
-export default function ContactUsPage() {
+export default function ContactPage() {
   return (
     <>
       <SiteHeader />

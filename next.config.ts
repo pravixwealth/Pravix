@@ -36,6 +36,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/contact-us",
+        destination: "/contact",
+        permanent: true,
+      },
+      {
         source: "/image/about-aditya-saini.jpg",
         destination: "/image/aditya-saini-profile-2026.jpg",
         permanent: true,
